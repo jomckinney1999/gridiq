@@ -8,6 +8,7 @@ import { DataTable } from "@/components/search/DataTable";
 import { FollowUpSuggestions } from "@/components/search/FollowUpSuggestions";
 import { SearchBar } from "@/components/search/SearchBar";
 import { StatCardGrid } from "@/components/search/StatCardGrid";
+import { normalizeQueryResponse } from "@/lib/normalizeQueryResponse";
 import type { ChatMessage, GridIQAPIResponse } from "@/types/gridiq-query";
 
 const MAX_MESSAGES = 20;
@@ -37,22 +38,6 @@ const EXAMPLE_CARDS = [
     border: "border-l-[#3b9eff]",
   },
 ] as const;
-
-function normalizeResponse(data: Record<string, unknown>): GridIQAPIResponse {
-  return {
-    intent: String(data.intent ?? "general"),
-    entities: (data.entities as GridIQAPIResponse["entities"]) ?? {},
-    display_type: String(data.display_type ?? "general"),
-    response_text: String(data.response_text ?? ""),
-    key_stats: Array.isArray(data.key_stats) ? (data.key_stats as GridIQAPIResponse["key_stats"]) : [],
-    table_data: (data.table_data as GridIQAPIResponse["table_data"]) ?? null,
-    follow_up_suggestions: Array.isArray(data.follow_up_suggestions)
-      ? (data.follow_up_suggestions as string[])
-      : [],
-    rawText: typeof data.rawText === "string" ? data.rawText : undefined,
-    conversationHistory: data.conversationHistory as GridIQAPIResponse["conversationHistory"],
-  };
-}
 
 function SearchResultsSkeleton() {
   return (
@@ -136,7 +121,7 @@ function SearchPageInner() {
           throw new Error(String(data.error ?? "Request failed"));
         }
 
-        const parsed = normalizeResponse(data);
+        const parsed = normalizeQueryResponse(data);
         const nextHist = (data.conversationHistory as ChatMessage[]) ?? hist;
         setConversationHistory(nextHist);
 

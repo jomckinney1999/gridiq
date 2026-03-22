@@ -1,7 +1,21 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
+import { AIResponseCard } from "@/components/search/AIResponseCard";
+import { DataTable } from "@/components/search/DataTable";
+import { FollowUpSuggestions } from "@/components/search/FollowUpSuggestions";
+import { StatCardGrid } from "@/components/search/StatCardGrid";
+import { normalizeQueryResponse } from "@/lib/normalizeQueryResponse";
+import type { GridIQAPIResponse } from "@/types/gridiq-query";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -12,6 +26,37 @@ const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1 } },
 };
+
+const EXAMPLE_PILLS = [
+  "Mahomes TDs 2024",
+  "Jayden Daniels playoffs",
+  "CeeDee Lamb advanced stats",
+  "Best WR by YPRR 2024",
+  "Derrick Henry 2024 season",
+] as const;
+
+const HERO_PLACEHOLDER = `Ask the Guru anything... try: 'How many TDs did Patrick Mahomes throw in 2024?'`;
+
+function HeroResultsSkeleton() {
+  return (
+    <div className="animate-pulse space-y-6">
+      <div className="space-y-2 rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)] p-4">
+        <div className="h-3 w-40 rounded bg-[rgba(255,255,255,0.06)]" />
+        <div className="h-3 w-full rounded bg-[rgba(255,255,255,0.04)]" />
+        <div className="h-3 w-[92%] rounded bg-[rgba(255,255,255,0.04)]" />
+        <div className="h-3 w-[80%] rounded bg-[rgba(255,255,255,0.04)]" />
+      </div>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {[0, 1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-28 rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)]"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 type Accent = "green" | "orange" | "blue" | "purple";
 
@@ -188,6 +233,87 @@ function PlayerCard({
 }
 
 export function Hero() {
+  const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [response, setResponse] = useState<GridIQAPIResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    taRef.current?.focus();
+  }, []);
+
+  const resize = useCallback(() => {
+    const el = taRef.current;
+    if (!el) return;
+    el.style.height = "0px";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }, []);
+
+  useEffect(() => {
+    resize();
+  }, [query, resize]);
+
+  const isLoadingRef = useRef(false);
+
+  const runQuery = useCallback(async (raw?: string) => {
+    const q = (raw ?? query).trim();
+    if (!q || isLoadingRef.current) return;
+
+    isLoadingRef.current = true;
+    setError(null);
+    setResponse(null);
+    setIsLoading(true);
+    setHasSearched(true);
+    setQuery(q);
+
+    try {
+      const res = await fetch("/api/query", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: q }),
+      });
+
+      const data = (await res.json()) as Record<string, unknown>;
+
+      if (!res.ok) {
+        throw new Error(String(data.error ?? "Request failed"));
+      }
+
+      setResponse(normalizeQueryResponse(data));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      isLoadingRef.current = false;
+      setIsLoading(false);
+    }
+  }, [query]);
+
+  function onKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      void runQuery();
+    }
+  }
+
+  function onFollowUp(s: string) {
+    setQuery(s);
+    void runQuery(s);
+  }
+
+  const showResultsBlock = hasSearched && (isLoading || response !== null || error !== null);
+
+  useEffect(() => {
+    if (!showResultsBlock) return;
+    const id = requestAnimationFrame(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [showResultsBlock, isLoading, response, error]);
+
   return (
     <section className="relative overflow-hidden bg-[#050507]">
       {/* Full viewport height */}
@@ -283,21 +409,116 @@ export function Hero() {
             <motion.div
               variants={fadeUp}
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-7 flex w-full flex-col items-center justify-center gap-3 sm:flex-row"
+              className="mx-auto mt-7 w-full max-w-[640px]"
             >
-              <a
-                href="/search"
-                className="inline-flex h-11 w-full max-w-[260px] items-center justify-center rounded-full bg-[#00ff87] px-5 text-[13px] font-semibold text-[#050507] shadow-[0_0_24px_rgba(0,255,135,0.25)] transition hover:brightness-110 hover:shadow-[0_0_28px_rgba(0,255,135,0.35)]"
+              <div
+                className="group flex w-full items-end gap-3 rounded-[14px] border border-[rgba(255,255,255,0.12)] bg-[#0d0d10] px-4 py-[14px] transition-[box-shadow,border-color] duration-200 ease-in-out hover:border-[rgba(0,255,135,0.3)] focus-within:border-[rgba(0,255,135,0.45)] focus-within:shadow-[0_0_0_3px_rgba(0,255,135,0.12),0_0_20px_rgba(0,255,135,0.08)] sm:gap-4"
               >
-                Start Searching Free
-              </a>
-              <a
-                href="#"
-                className="inline-flex h-11 w-full max-w-[260px] items-center justify-center rounded-full border border-[rgba(255,255,255,0.10)] bg-[rgba(13,13,16,0.35)] px-5 text-[13px] font-semibold text-[#f2f2f5] transition hover:bg-[#1c1c21]"
-              >
-                Watch Demo ↗
-              </a>
+                <div className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[rgba(0,255,135,0.1)]">
+                  <span className="text-[14px] font-light leading-none text-[#00ff87]">
+                    ✦
+                  </span>
+                </div>
+                <textarea
+                  ref={taRef}
+                  rows={1}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={onKeyDown}
+                  placeholder={HERO_PLACEHOLDER}
+                  disabled={isLoading}
+                  className="min-h-[24px] min-w-0 w-full resize-none border-0 bg-transparent py-1 text-left text-[14px] leading-relaxed text-[#f2f2f5] outline-none placeholder:text-[#44445a]"
+                />
+                <button
+                  type="button"
+                  onClick={() => void runQuery()}
+                  disabled={isLoading || !query.trim()}
+                  className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#00ff87] px-4 py-2 text-[13px] font-bold text-[#050507] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isLoading ? (
+                    <>
+                      <span
+                        className="h-4 w-4 animate-spin rounded-full border-2 border-[#050507] border-t-transparent"
+                        aria-hidden
+                      />
+                      Thinking...
+                    </>
+                  ) : (
+                    "Ask the Guru"
+                  )}
+                </button>
+              </div>
+
+              <div className="mt-2 flex w-full flex-wrap justify-center gap-2">
+                {EXAMPLE_PILLS.map((pill) => (
+                  <button
+                    key={pill}
+                    type="button"
+                    onClick={() => void runQuery(pill)}
+                    className="rounded-full border border-[rgba(255,255,255,0.08)] bg-[#0d0d10] px-3 py-1.5 text-left text-[12px] text-[#8888a0] transition hover:border-[rgba(0,255,135,0.35)] hover:bg-[rgba(0,255,135,0.06)] hover:text-[#00ff87]"
+                  >
+                    {pill}
+                  </button>
+                ))}
+              </div>
             </motion.div>
+
+            {showResultsBlock ? (
+              <motion.div
+                ref={resultsRef}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="mx-auto mt-6 w-full max-w-[800px] scroll-mt-24 text-left"
+              >
+                <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#00ff87]">
+                  Guru says:
+                </div>
+
+                {error ? (
+                  <div className="mt-3 rounded-xl border border-[rgba(255,107,43,0.25)] bg-[rgba(255,107,43,0.08)] px-4 py-3 text-[13px] text-[#ff6b2b]">
+                    {error}
+                  </div>
+                ) : null}
+
+                {isLoading ? <HeroResultsSkeleton /> : null}
+
+                {!isLoading && response ? (
+                  <motion.div
+                    key={response.response_text?.slice(0, 48) ?? "r"}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className="mt-3 space-y-6"
+                  >
+                    <AIResponseCard response={response} />
+                    {response.key_stats?.length ? (
+                      <StatCardGrid stats={response.key_stats} />
+                    ) : null}
+                    {response.table_data ? (
+                      <DataTable table={response.table_data} />
+                    ) : null}
+                    {response.follow_up_suggestions?.length ? (
+                      <FollowUpSuggestions
+                        suggestions={response.follow_up_suggestions}
+                        onPick={onFollowUp}
+                      />
+                    ) : null}
+                  </motion.div>
+                ) : null}
+
+                {!isLoading && (response || error) ? (
+                  <div className="mt-3">
+                    <Link
+                      href="/search"
+                      className="inline-flex items-center gap-1 text-[14px] font-semibold text-[#ff6b2b] underline-offset-4 transition hover:text-[#ff8f5a] hover:underline"
+                    >
+                      Want more? →
+                    </Link>
+                  </div>
+                ) : null}
+              </motion.div>
+            ) : null}
 
             <motion.div
               variants={fadeUp}
