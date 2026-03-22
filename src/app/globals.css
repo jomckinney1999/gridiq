@@ -1,0 +1,390 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* GridIQ Design Tokens (PRD v1.0) */
+  color-scheme: dark;
+
+  /* Backgrounds */
+  --bg-base: #050507;
+  --bg-card: #0d0d10;
+  --bg-card2: #111116;
+  --bg-hover: #1c1c21;
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-md: rgba(255, 255, 255, 0.1);
+  --border-lg: rgba(255, 255, 255, 0.16);
+
+  /* Text */
+  --txt: #f2f2f5;
+  --txt-2: #8888a0;
+  --txt-3: #44445a;
+
+  /* Accent Colors */
+  --neon-green: #00ff87;
+  --neon-orange: #ff6b2b;
+  --neon-blue: #3b9eff;
+  --neon-purple: #a855f7;
+
+  /* Glow layers */
+  --g-glow: rgba(0, 255, 135, 0.25);
+  --o-glow: rgba(255, 107, 43, 0.25);
+  --b-glow: rgba(59, 158, 255, 0.2);
+
+  /* A few useful derived tokens (still PRD-faithful) */
+  --shadow-glow-g: 0 0 20px var(--g-glow);
+  --shadow-glow-o: 0 0 20px var(--o-glow);
+  --shadow-glow-b: 0 0 20px var(--b-glow);
+  --shadow-glow-soft: 0 0 40px rgba(0, 0, 0, 0.45);
+
+  /* Type scale */
+  --text-hero: clamp(40px, 6vw, 64px);
+  --text-h1: clamp(28px, 4vw, 40px);
+  --text-h2: clamp(20px, 3vw, 28px);
+  --text-h3: 18px;
+  --text-body: 15px;
+  --text-sm: 13px;
+  --text-xs: 11px;
+  --text-stat: clamp(24px, 3vw, 36px);
+
+  /* Motion + shape (derived primitives; do not change PRD colors) */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Visual language primitives (PRD §2.3) */
+  --grid-line: rgba(255, 255, 255, 0.045); /* ~3–5% after masking/opacity */
+  --grid-size: 48px;
+  --glass: rgba(13, 13, 16, 0.55);
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--txt);
+  --color-card: var(--bg-card);
+  --color-card-foreground: var(--txt);
+  --color-muted: var(--bg-hover);
+  --color-muted-foreground: var(--txt-2);
+  --color-border: var(--border);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* PRD: NO light mode. */
+    color-scheme: dark;
+  }
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--txt);
+  font-family: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: var(--text-body);
+  line-height: 1.65;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+strong {
+  color: var(--txt);
+  font-weight: 600;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--txt);
+  letter-spacing: -1px;
+}
+h1 {
+  font-size: var(--text-h1);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+}
+h2 {
+  font-size: var(--text-h2);
+  font-weight: 850;
+}
+h3 {
+  font-size: var(--text-h3);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Visible focus that matches PRD neon/glow language */
+:where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(0, 255, 135, 0.55), 0 0 24px rgba(0, 255, 135, 0.25);
+  border-radius: 10px;
+}
+
+/* Scrollbars (dark-only, subtle, PRD-faithful) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.14) rgba(255, 255, 255, 0.04);
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.035);
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+::selection {
+  background: rgba(0, 255, 135, 0.18);
+  color: var(--txt);
+}
+
+/* Subtle grid background helper */
+.gridiq-grid {
+  position: relative;
+  isolation: isolate;
+}
+.gridiq-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  mask-image: radial-gradient(circle at 50% 35%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.92) 40%, transparent 72%);
+  opacity: 0.55;
+  z-index: -1;
+}
+
+/* Visual language helpers (PRD §2.3) */
+
+/* Glassmorphism nav surface */
+.gridiq-glass {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+/* Card surfaces */
+.gridiq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.gridiq-card2 {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Top accent line (2px) */
+.gridiq-top-accent {
+  position: relative;
+  overflow: hidden;
+}
+.gridiq-top-accent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--neon-green), transparent);
+  opacity: 0.9;
+}
+.gridiq-top-accent[data-accent="orange"]::before {
+  background: linear-gradient(90deg, var(--neon-orange), transparent);
+}
+.gridiq-top-accent[data-accent="blue"]::before {
+  background: linear-gradient(90deg, var(--neon-blue), transparent);
+}
+.gridiq-top-accent[data-accent="purple"]::before {
+  background: linear-gradient(90deg, var(--neon-purple), transparent);
+}
+
+/* Accent glow helpers for active elements */
+.gridiq-glow-g {
+  box-shadow: var(--shadow-glow-g);
+}
+.gridiq-glow-o {
+  box-shadow: var(--shadow-glow-o);
+}
+.gridiq-glow-b {
+  box-shadow: var(--shadow-glow-b);
+}
+
+/* Neon ring primitives (buttons/inputs) */
+.gridiq-ring {
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out),
+    background-color 200ms var(--ease-out), transform 200ms var(--ease-out);
+}
+.gridiq-ring:hover {
+  border-color: var(--border-md);
+  background: var(--bg-hover);
+}
+.gridiq-ring:focus-visible {
+  outline: none;
+}
+.gridiq-ring[data-accent="green"]:focus-visible {
+  border-color: rgba(0, 255, 135, 0.28);
+  box-shadow: 0 0 0 1px rgba(0, 255, 135, 0.55), 0 0 24px rgba(0, 255, 135, 0.25);
+}
+.gridiq-ring[data-accent="orange"]:focus-visible {
+  border-color: rgba(255, 107, 43, 0.28);
+  box-shadow: 0 0 0 1px rgba(255, 107, 43, 0.55), 0 0 24px rgba(255, 107, 43, 0.25);
+}
+.gridiq-ring[data-accent="blue"]:focus-visible {
+  border-color: rgba(59, 158, 255, 0.28);
+  box-shadow: 0 0 0 1px rgba(59, 158, 255, 0.55), 0 0 24px rgba(59, 158, 255, 0.2);
+}
+.gridiq-ring[data-accent="purple"]:focus-visible {
+  border-color: rgba(168, 85, 247, 0.28);
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.55), 0 0 24px rgba(168, 85, 247, 0.22);
+}
+
+/* Gradient headline text (PRD §4.1.B) */
+.gridiq-gradient-text {
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-orange));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glow orbs (PRD §4.1.B) */
+.gridiq-orb {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+.gridiq-orb[data-accent="green"] {
+  background: radial-gradient(circle at 30% 30%, rgba(0, 255, 135, 0.35), transparent 62%);
+}
+.gridiq-orb[data-accent="blue"] {
+  background: radial-gradient(circle at 30% 30%, rgba(59, 158, 255, 0.28), transparent 62%);
+}
+.gridiq-orb[data-accent="orange"] {
+  background: radial-gradient(circle at 30% 30%, rgba(255, 107, 43, 0.28), transparent 62%);
+}
+
+/* Hover lift + border brighten (PRD §4.1.D / §9.4) */
+.gridiq-hover-lift {
+  transition: transform 200ms var(--ease-out), border-color 200ms var(--ease-out),
+    background-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+}
+.gridiq-hover-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-md);
+  background-color: var(--bg-hover);
+}
+
+/* Gradient stat boxes (PRD §4.1.E) */
+.gridiq-stat-box {
+  border-radius: var(--radius-md);
+  border: 0.5px solid var(--border-md);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+}
+.gridiq-stat-box[data-accent="green"] {
+  background: linear-gradient(135deg, rgba(0, 255, 135, 0.12), rgba(0, 255, 135, 0.03));
+  border-color: rgba(0, 255, 135, 0.2);
+}
+.gridiq-stat-box[data-accent="orange"] {
+  background: linear-gradient(135deg, rgba(255, 107, 43, 0.12), rgba(255, 107, 43, 0.03));
+  border-color: rgba(255, 107, 43, 0.2);
+}
+.gridiq-stat-box[data-accent="blue"] {
+  background: linear-gradient(135deg, rgba(59, 158, 255, 0.12), rgba(59, 158, 255, 0.03));
+  border-color: rgba(59, 158, 255, 0.2);
+}
+.gridiq-stat-box[data-accent="purple"] {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(168, 85, 247, 0.03));
+  border-color: rgba(168, 85, 247, 0.2);
+}
+
+/* Type primitives (PRD §2.2) */
+.gridiq-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--txt-3);
+}
+.gridiq-h1 {
+  font-size: var(--text-h1);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  color: var(--txt);
+}
+.gridiq-h2 {
+  font-size: var(--text-h2);
+  font-weight: 850;
+  letter-spacing: -1px;
+  color: var(--txt);
+}
+.gridiq-stat {
+  font-size: var(--text-stat);
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle divider line that respects PRD borders */
+.gridiq-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
