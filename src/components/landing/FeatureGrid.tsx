@@ -209,7 +209,7 @@ export function FeatureGrid() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
           <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
-            Why GridIQ
+            Why NFL Stat Guru
           </div>
           <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[32px]">
             Everything other sites won’t show you

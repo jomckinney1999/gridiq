@@ -221,7 +221,7 @@ function SearchPageInner() {
             <div className="grid h-16 w-16 place-items-center rounded-2xl bg-[rgba(0,255,135,0.1)] text-[32px] text-[#00ff87]">
               ✦
             </div>
-            <h2 className="mt-6 text-[24px] font-bold text-[#f2f2f5]">Ask GridIQ anything</h2>
+            <h2 className="mt-6 text-[24px] font-bold text-[#f2f2f5]">Ask the Guru anything</h2>
             <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-[#8888a0]">
               Try: routes run, fumbles, prospect profiles, advanced metrics, player comparisons
             </p>

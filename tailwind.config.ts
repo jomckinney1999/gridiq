@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // GridIQ PRD v1.0 (STRICT)
+        // NFL Stat Guru PRD v1.0 (STRICT)
         "bg-base": "var(--bg-base)",
         "bg-card": "var(--bg-card)",
         "bg-card2": "var(--bg-card2)",

@@ -276,8 +276,8 @@ export function Hero() {
               transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               className="mt-4 max-w-[480px] text-[16px] leading-relaxed text-[#8888a0]"
             >
-              Ask anything. Get instant answers. From route counts to playoff
-              fumbles — GridIQ answers the questions other sites can’t.
+              Ask the Guru anything. From route counts to playoff fumbles — NFL Stat Guru
+              answers the questions ESPN can’t.
             </motion.p>
 
             <motion.div
@@ -339,7 +339,7 @@ export function Hero() {
                   <div className="ml-2 flex flex-1 items-center justify-center">
                     <div className="flex w-full max-w-[420px] items-center gap-2 rounded-full border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] px-4 py-1.5 text-[12px] text-[#8888a0]">
                       <span className="text-[#44445a]">🔒</span>
-                      <span className="truncate">gridiq.com/search</span>
+                      <span className="truncate">nflstatguru.com/search</span>
                     </div>
                   </div>
                 </div>
@@ -361,7 +361,7 @@ export function Hero() {
                       href="/search"
                       className="inline-flex h-11 items-center justify-center rounded-full bg-[#00ff87] px-5 text-[13px] font-semibold text-[#050507] shadow-[0_0_24px_rgba(0,255,135,0.25)] transition hover:brightness-110"
                     >
-                      Ask GridIQ
+                      Ask the Guru ✦
                     </a>
                   </div>
 

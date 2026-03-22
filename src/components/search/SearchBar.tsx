@@ -63,7 +63,7 @@ export function SearchBar({ query, onQueryChange, onSubmit, isLoading }: SearchB
               Thinking...
             </>
           ) : (
-            "Ask GridIQ"
+            "Ask the Guru ✦"
           )}
         </button>
       </div>

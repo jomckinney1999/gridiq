@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Logo } from "@/components/ui/Logo";
 
 const links = ["Stats", "Stats School", "Prospects", "Advanced", "Teams", "Pricing"] as const;
 
@@ -10,17 +11,7 @@ export function TopNav() {
       <div className="border-b border-[rgba(255,255,255,0.06)] bg-[#050507]/70 backdrop-blur-md">
         <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between px-4 sm:px-6">
           <a href="/" className="flex items-center gap-3">
-            <div className="grid h-8 w-8 place-items-center rounded-[10px] bg-gradient-to-br from-[#00ff87] to-[#3b9eff] text-[12px] font-black text-white">
-              G
-            </div>
-            <div className="flex items-baseline gap-0.5">
-              <span className="text-[13px] font-semibold tracking-tight text-[#f2f2f5]">
-                Grid
-              </span>
-              <span className="text-[13px] font-semibold tracking-tight text-[#00ff87]">
-                IQ
-              </span>
-            </div>
+            <Logo />
           </a>
 
           <nav className="hidden items-center gap-2 md:flex">

@@ -8,8 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "GridIQ",
-  description: "The NFL stats platform built for obsessives.",
+  title: "NFL Stat Guru — Advanced NFL Analytics",
+  description:
+    "Ask anything about NFL stats. AI-powered search with 26 years of real data.",
 };
 
 export default function RootLayout({

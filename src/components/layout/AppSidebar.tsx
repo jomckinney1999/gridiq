@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/components/ui/Logo";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAppShell } from "@/components/layout/AppShell";
@@ -68,20 +69,10 @@ export function AppSidebar() {
       <div className="flex items-center gap-2 px-2 py-3">
         <Link
           href="/"
-          className="flex min-w-0 items-center justify-center gap-2 lg:justify-start"
+          className="flex min-w-0 max-lg:[&>div>span]:hidden items-center justify-center gap-2 lg:justify-start"
           onClick={() => setMobileOpen(false)}
         >
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-[10px] bg-gradient-to-br from-[#00ff87] to-[#3b9eff] text-[12px] font-black text-white">
-            G
-          </div>
-          <div className="hidden min-w-0 items-baseline gap-0.5 lg:flex">
-            <span className="truncate text-[13px] font-semibold tracking-tight text-[#f2f2f5]">
-              Grid
-            </span>
-            <span className="truncate text-[13px] font-semibold tracking-tight text-[#00ff87]">
-              IQ
-            </span>
-          </div>
+          <Logo />
         </Link>
       </div>
 
@@ -161,7 +152,7 @@ export function AppSidebar() {
                 Pro
               </span>
             </div>
-            <div className="truncate text-[10px] text-[#55556a]">gridiq.pro</div>
+            <div className="truncate text-[10px] text-[#55556a]">nflstatguru.pro</div>
           </div>
         </div>
       </div>

@@ -58,12 +58,12 @@ export function AIResponseCard({ response }: { response: GridIQAPIResponse }) {
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           <div
-            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md bg-gradient-to-br ${avatar} text-[10px] font-black text-[#050507]`}
+            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md bg-gradient-to-br ${avatar} text-[8px] font-black leading-none tracking-tighter text-[#050507]`}
           >
-            G
+            SG
           </div>
           <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#00ff87]">
-            GridIQ Analysis
+            Guru Analysis
           </div>
         </div>
         <span className="shrink-0 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#66667a]">

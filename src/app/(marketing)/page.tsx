@@ -1,16 +1,13 @@
+import { Logo } from "@/components/ui/Logo";
+
 export default function MarketingHomePage() {
   return (
     <div className="min-h-dvh gridiq-grid">
       <div className="mx-auto w-full max-w-6xl px-6 py-16">
         <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 backdrop-blur-[16px]">
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-[10px] bg-gradient-to-br from-[color:var(--neon-green)] to-[color:var(--neon-blue)] grid place-items-center text-[12px] font-black text-[color:var(--bg-base)]">
-              G
-            </div>
             <div className="flex items-center gap-6">
-              <span className="text-[13px] font-semibold tracking-tight text-[color:var(--txt)]">
-                GridIQ
-              </span>
+              <Logo />
               <nav className="hidden items-center gap-4 text-[12px] font-medium text-[color:var(--txt-2)] md:flex">
                 <a className="hover:text-[color:var(--txt)]" href="/search">
                   Stats
@@ -47,8 +44,8 @@ export default function MarketingHomePage() {
           </h1>
 
           <p className="mt-4 max-w-2xl text-[15px] leading-[1.65] text-[color:var(--txt-2)]">
-            Ask anything. Get instant answers. From route counts to playoff
-            fumbles — GridIQ answers the questions other sites can’t.
+            Ask the Guru anything. From route counts to playoff fumbles — NFL Stat
+            Guru answers the questions ESPN can’t.
           </p>
 
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">

@@ -26,7 +26,7 @@ export function CTASection() {
             </h2>
             <p className="mt-3 text-[13px] leading-relaxed text-[#8888a0]">
               Join analysts, fantasy players, and football obsessives who use
-              GridIQ to go deeper than any other platform.
+              NFL Stat Guru to go deeper than any other platform.
             </p>
 
             <div className="mt-7 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">

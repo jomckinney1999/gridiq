@@ -294,7 +294,7 @@ except Exception as e:
     print(f"Seasonal data error: {e}")
 
 print("\n" + "="*50)
-print("DONE! GridIQ database fully loaded.")
+print("DONE! NFL Stat Guru database fully loaded.")
 print(f"Players: check Supabase players table")
 print(f"Stats: {success:,} weekly rows (1999-2024)")
 print("="*50)
