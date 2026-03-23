@@ -4,30 +4,34 @@ import Link from "next/link";
 import type { TrendingFeedItem } from "@/types/trending";
 import { cn } from "@/lib/utils";
 
-const SOURCE_ACCENT: Record<string, string> = {
-  ESPN: "var(--red-accent)",
-  Twitter: "var(--blue)",
-  Reddit: "var(--orange)",
-  Beat: "var(--purple)",
-  NFL: "var(--green)",
-  PFF: "var(--txt-2)",
+/** Badge background + label text color (readable on each brand). */
+const SOURCE_BADGE: Record<string, { bg: string; fg: string; short: string }> = {
+  ESPN: { bg: "#d00", fg: "#ffffff", short: "ESPN" },
+  NFL: { bg: "#013369", fg: "#ffffff", short: "NFL" },
+  PFT: { bg: "#e8891a", fg: "#ffffff", short: "PFT" },
+  NBC: { bg: "#e8891a", fg: "#ffffff", short: "NBC" },
+  BR: { bg: "#f26522", fg: "#ffffff", short: "BR" },
+  PFR: { bg: "#1a1a1a", fg: "#ffffff", short: "PFR" },
+  Reddit: { bg: "#ff4500", fg: "#ffffff", short: "Reddit" },
+  PFF: { bg: "#1a1a1a", fg: "#ffffff", short: "PFF" },
 };
 
-const SOURCE_LABEL: Record<string, string> = {
-  ESPN: "ESPN",
-  Twitter: "X",
-  Reddit: "Reddit",
-  Beat: "Beat",
-  NFL: "NFL",
-  PFF: "PFF",
-};
+function badgeFor(item: TrendingFeedItem) {
+  return SOURCE_BADGE[item.source] ?? {
+    bg: "var(--bg-subtle-2)",
+    fg: "var(--txt)",
+    short: item.source,
+  };
+}
 
 type NewsCardProps = {
   item: TrendingFeedItem;
 };
 
 export function NewsCard({ item }: NewsCardProps) {
-  const accent = SOURCE_ACCENT[item.source] ?? "var(--txt-2)";
+  const badge = badgeFor(item);
+  const href = item.url && item.url !== "#" ? item.url : undefined;
+  const isReddit = item.isReddit === true;
 
   return (
     <article
@@ -40,16 +44,16 @@ export function NewsCard({ item }: NewsCardProps) {
         aria-hidden
         className="absolute inset-x-0 top-0 h-[2px]"
         style={{
-          background: `linear-gradient(90deg, ${accent}, transparent)`,
+          background: `linear-gradient(90deg, ${typeof badge.bg === "string" && badge.bg.startsWith("#") ? badge.bg : "var(--green)"}, transparent)`,
         }}
       />
       <div className="p-4 pt-5">
         <div className="flex flex-wrap items-center gap-2">
           <span
-            className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--txt)]"
-            style={{ backgroundColor: accent }}
+            className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
+            style={{ backgroundColor: badge.bg, color: badge.fg }}
           >
-            {SOURCE_LABEL[item.source] ?? item.source}
+            {badge.short}
           </span>
           <span className="text-[11px] text-[var(--txt-2)]">
             <span className="font-medium text-[var(--txt-2)]">{item.author}</span>
@@ -58,7 +62,15 @@ export function NewsCard({ item }: NewsCardProps) {
           </span>
         </div>
 
-        <h3 className="mt-2 text-[13px] font-semibold leading-snug text-[var(--txt)]">{item.headline}</h3>
+        <h3 className="mt-2 text-[13px] font-semibold leading-snug text-[var(--txt)]">
+          {href ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--green)] hover:underline">
+              {item.headline}
+            </a>
+          ) : (
+            item.headline
+          )}
+        </h3>
         <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-[var(--txt-2)]">{item.body}</p>
 
         {item.playerTags.length > 0 ? (
@@ -75,11 +87,36 @@ export function NewsCard({ item }: NewsCardProps) {
           </div>
         ) : null}
 
-        <div className="mt-3 flex flex-wrap gap-3 text-[10px] font-medium text-[var(--txt-muted)]">
-          <span>{item.engagement.likes.toLocaleString()} likes</span>
-          <span>{item.engagement.reposts.toLocaleString()} reposts</span>
-          <span>{item.engagement.views.toLocaleString()} views</span>
-        </div>
+        {isReddit ? (
+          <div className="mt-3 flex flex-wrap gap-4 text-[11px] font-semibold text-[var(--txt-2)]">
+            <span title="Upvotes">
+              ↑ {item.engagement.likes.toLocaleString()}
+            </span>
+            <span title="Comments">
+              💬 {item.engagement.reposts.toLocaleString()}
+            </span>
+          </div>
+        ) : null}
+
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-flex text-[12px] font-semibold text-[var(--green)] hover:underline"
+          >
+            Read more →
+          </a>
+        ) : null}
+
+        <p className="mt-3 border-t border-[var(--border)] pt-3 text-[10px] leading-snug text-[var(--txt-3)]">
+          Via {item.sourceName}
+          {item.isVerified ? (
+            <span className="ml-1 rounded border border-[var(--border)] px-1 py-0.5 text-[9px] font-bold text-[var(--txt-muted)]">
+              Verified source
+            </span>
+          ) : null}
+        </p>
       </div>
     </article>
   );

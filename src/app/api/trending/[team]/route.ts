@@ -8,5 +8,6 @@ export async function GET(
   const { team: raw } = await context.params;
   const team = decodeURIComponent(raw ?? "ALL");
   const data = getMockTrending(team);
-  return NextResponse.json(data);
+  /* Feed rows come from /api/trending/feed (Supabase news_feed). */
+  return NextResponse.json({ ...data, feed: [] });
 }

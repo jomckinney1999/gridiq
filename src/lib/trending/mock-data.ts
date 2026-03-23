@@ -1,9 +1,18 @@
 import type { TrendingApiResponse, TrendingFeedItem, TrendingPlayer } from "@/types/trending";
 import { TEAM_FULL_DISPLAY } from "@/lib/trending/nfl-divisions";
 
+const SOURCE_DISPLAY: Record<string, string> = {
+  ESPN: "ESPN",
+  NFL: "NFL Network",
+  Beat: "Beat",
+  Twitter: "X",
+  Reddit: "Reddit",
+  PFF: "PFF",
+};
+
 const src = (
   id: string,
-  source: TrendingFeedItem["source"],
+  source: string,
   author: string,
   handle: string,
   headline: string,
@@ -15,6 +24,7 @@ const src = (
 ): TrendingFeedItem => ({
   id,
   source,
+  sourceName: SOURCE_DISPLAY[source] ?? source,
   author,
   authorHandle: handle,
   headline,

@@ -3,23 +3,39 @@
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TEAM_COLORS } from "@/lib/trending/team-colors";
+import { mapNewsFeedRow, type NewsFeedApiRow } from "@/lib/trending/news-feed-map";
 import type { TrendingApiResponse, TrendingFeedItem } from "@/types/trending";
 import { NewsCard, NewsCardSkeleton } from "@/components/trending/NewsCard";
 import { SourceFilters } from "@/components/trending/SourceFilters";
 import { TeamSidebar } from "@/components/trending/TeamSidebar";
 import { TrendingPlayerStrip } from "@/components/trending/TrendingPlayerStrip";
 
-const OFFICIAL_SOURCES = new Set(["ESPN", "NFL", "Beat", "PFF"]);
-const SOCIAL_SOURCES = new Set(["Twitter", "Reddit"]);
+const BEAT_TYPES = new Set(["PFT", "NBC", "BR", "PFR"]);
+
+/** Official / wire column */
+const OFFICIAL_TYPES = new Set(["ESPN", "NFL", "PFT", "NBC", "PFR", "BR", "PFF"]);
+const SOCIAL_TYPES = new Set(["Reddit", "Twitter"]);
+
+function matchesSourceFilter(item: TrendingFeedItem, filterId: string): boolean {
+  if (filterId === "ALL") return true;
+  const t = item.source;
+  if (filterId === "ESPN") return t === "ESPN";
+  if (filterId === "NFL") return t === "NFL";
+  if (filterId === "PFF") return t === "PFF";
+  if (filterId === "Reddit") return t === "Reddit";
+  if (filterId === "Twitter") return t === "Twitter";
+  if (filterId === "Beat") return BEAT_TYPES.has(t);
+  return false;
+}
 
 function filterBySources(feed: TrendingFeedItem[], active: Set<string>): TrendingFeedItem[] {
   if (active.has("ALL") || active.size === 0) return feed;
-  return feed.filter((f) => active.has(f.source));
+  return feed.filter((f) => [...active].some((id) => id !== "ALL" && matchesSourceFilter(f, id)));
 }
 
 function splitColumns(feed: TrendingFeedItem[]) {
-  const breaking = feed.filter((f) => OFFICIAL_SOURCES.has(f.source));
-  const social = feed.filter((f) => SOCIAL_SOURCES.has(f.source));
+  const breaking = feed.filter((f) => OFFICIAL_TYPES.has(f.source));
+  const social = feed.filter((f) => SOCIAL_TYPES.has(f.source));
   return { breaking, social };
 }
 
@@ -31,21 +47,45 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
   const team = teamParam.toUpperCase() === "ALL" ? "ALL" : teamParam.toUpperCase();
 
   const [data, setData] = useState<TrendingApiResponse | null>(null);
+  const [feedItems, setFeedItems] = useState<TrendingFeedItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [feedError, setFeedError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeFilters, setActiveFilters] = useState<Set<string>>(() => new Set(["ALL"]));
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+    setFeedError(null);
     try {
-      const res = await fetch(`/api/trending/${encodeURIComponent(team)}`);
-      if (!res.ok) throw new Error("Failed to load trending feed");
-      const json = (await res.json()) as TrendingApiResponse;
-      setData(json);
+      const [metaRes, feedRes] = await Promise.all([
+        fetch(`/api/trending/${encodeURIComponent(team)}`),
+        fetch(`/api/trending/feed?team=${encodeURIComponent(team)}&source=all&limit=80`),
+      ]);
+
+      if (!metaRes.ok) throw new Error("Failed to load team info");
+      const metaJson = (await metaRes.json()) as TrendingApiResponse;
+      setData(metaJson);
+
+      if (!feedRes.ok) {
+        const errJson = (await feedRes.json().catch(() => ({}))) as { error?: string };
+        setFeedItems([]);
+        setFeedError(errJson.error ?? "Could not load news feed. Check Supabase configuration.");
+        return;
+      }
+
+      const feedJson = (await feedRes.json()) as { all?: NewsFeedApiRow[]; error?: string };
+      if (feedJson.error) {
+        setFeedItems([]);
+        setFeedError(feedJson.error);
+        return;
+      }
+      const rows = feedJson.all ?? [];
+      setFeedItems(rows.map(mapNewsFeedRow));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
       setData(null);
+      setFeedItems([]);
     } finally {
       setLoading(false);
     }
@@ -70,9 +110,8 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
   }, []);
 
   const filteredFeed = useMemo(() => {
-    if (!data?.feed) return [];
-    return filterBySources(data.feed, activeFilters);
-  }, [data?.feed, activeFilters]);
+    return filterBySources(feedItems, activeFilters);
+  }, [feedItems, activeFilters]);
 
   const { breaking, social } = useMemo(() => splitColumns(filteredFeed), [filteredFeed]);
 
@@ -151,6 +190,12 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
 
               <TrendingPlayerStrip players={data.trendingPlayers} />
 
+              {feedError ? (
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card2)] px-4 py-3 text-[13px] text-[var(--txt-2)]">
+                  {feedError}
+                </div>
+              ) : null}
+
               <div>
                 <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)]">
                   Sources
@@ -160,7 +205,9 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
 
               {filteredFeed.length === 0 && !loading ? (
                 <p className="py-10 text-center text-[14px] text-[var(--txt-2)]">
-                  No stories match the selected filters. Try All Sources or adjust filters.
+                  {feedItems.length === 0
+                    ? "No stories yet. Run the news fetcher (scripts/news/fetch_news.py) or check back after the next sync."
+                    : "No stories match the selected filters. Try All Sources or adjust filters."}
                 </p>
               ) : (
                 <div className="grid gap-8 lg:grid-cols-2">
