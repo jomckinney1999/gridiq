@@ -25,7 +25,7 @@ const BROWSE = [
 ] as const;
 
 const TOOLS = [
-  { href: "/trivia", label: "Stat Grid", icon: "⚡" },
+  { href: "/games", label: "Games", icon: "🎮" },
   { href: "/search?q=player+compare", label: "Player Compare", icon: "⚖" },
   { href: "/search?q=fantasy+optimizer", label: "Fantasy Optimizer", icon: "◆" },
   { href: "/stats-school", label: "Stats School", icon: "📚" },

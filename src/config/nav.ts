@@ -2,17 +2,25 @@ export const PRIMARY_NAV = [
   { href: "/", label: "Home" },
   { href: "/trending", label: "Trending" },
   { href: "/stats-school", label: "Stats School" },
-  { href: "/trivia", label: "Trivia" },
+  { href: "/games", label: "Games" },
   { href: "/prospects", label: "Prospects" },
-  { href: "/tierlist", label: "Tier Lists" },
   { href: "/fantasy", label: "Fantasy" },
   { href: "/betting", label: "Betting" },
+  { href: "/content", label: "Content" },
+  { href: "/courses", label: "Courses" },
 ] as const;
 
 /** Icons for collapsed sidebar (md width). */
-export const PRIMARY_NAV_SIDEBAR_ICONS = ["⌂", "📈", "📚", "⚡", "◇", "📊", "🏆", "◆"] as const;
+export const PRIMARY_NAV_SIDEBAR_ICONS = ["⌂", "📈", "📚", "🎮", "◇", "🏆", "💰", "📺", "🎓"] as const;
 
 export function isActiveNav(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
+  if (href === "/games") {
+    return (
+      pathname === "/games" ||
+      pathname.startsWith("/trivia") ||
+      pathname.startsWith("/tierlist")
+    );
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
