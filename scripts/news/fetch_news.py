@@ -5,9 +5,9 @@ Run: pip install feedparser requests supabase python-dotenv python-dateutil
 """
 import os
 import re
-import json
 import email.utils
 from datetime import datetime, timezone
+from typing import Any, Optional
 
 import feedparser
 import requests
@@ -117,6 +117,40 @@ def extract_players(text: str) -> list[str]:
     return list(dict.fromkeys(found))
 
 
+def extract_image(entry: Any) -> Optional[str]:
+    """Best-effort image URL from RSS entry (media, enclosures, or summary HTML)."""
+    media_list = getattr(entry, "media_content", None) or entry.get("media_content") or []
+    if media_list:
+        for media in media_list:
+            if not isinstance(media, dict):
+                continue
+            t = media.get("type") or ""
+            if t.startswith("image") or media.get("medium") == "image":
+                u = media.get("url")
+                if u:
+                    return u
+            u = media.get("url")
+            if u and (not t or t.startswith("image")):
+                return u
+
+    for enc in getattr(entry, "enclosures", None) or entry.get("enclosures", []) or []:
+        if not isinstance(enc, dict):
+            continue
+        if "image" in (enc.get("type") or ""):
+            return enc.get("href") or enc.get("url")
+
+    summary = entry.get("summary", "") or entry.get("description", "") or ""
+    img_match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', summary)
+    if img_match:
+        url = img_match.group(1)
+        if url.startswith("http"):
+            return url
+        if url.startswith("//"):
+            return "https:" + url
+
+    return None
+
+
 def parse_date(entry) -> str:
     for field in ("published", "updated", "created"):
         val = entry.get(field)
@@ -157,6 +191,7 @@ def fetch_rss_feeds():
                 if not link:
                     continue
                 full_text = f"{title} {clean_body}"
+                img = extract_image(entry)
                 articles.append(
                     {
                         "source_name": source["name"],
@@ -165,6 +200,7 @@ def fetch_rss_feeds():
                         "headline": title[:300],
                         "body": clean_body,
                         "url": link,
+                        "image_url": img,
                         "team_tags": extract_teams(full_text),
                         "player_tags": extract_players(full_text),
                         "published_at": parse_date(entry),
@@ -231,14 +267,33 @@ def fetch_reddit():
                 team_tags = list(dict.fromkeys(team_tags))
                 created = datetime.fromtimestamp(p.get("created_utc", 0), tz=timezone.utc).isoformat()
                 selftext = (p.get("selftext") or "")[:500]
+                flair_raw = (p.get("link_flair_text") or "").strip()
+                reddit_flair = flair_raw if flair_raw else None
+                thumb = p.get("thumbnail") or ""
+                if thumb in ("self", "default", "nsfw", "spoiler", "", None):
+                    thumb = None
+                elif isinstance(thumb, str) and thumb.startswith("//"):
+                    thumb = "https:" + thumb
+                preview_img = None
+                preview = p.get("preview") or {}
+                if isinstance(preview, dict):
+                    imgs = preview.get("images") or []
+                    if imgs and isinstance(imgs[0], dict):
+                        src = (imgs[0].get("source") or {}).get("url")
+                        if src:
+                            preview_img = src.replace("&amp;", "&")
+                image_url = preview_img or thumb
+                author_u = p.get("author") or "reddit"
                 posts.append(
                     {
                         "source_name": sub_data["label"],
                         "source_type": "Reddit",
-                        "author": p.get("author_fullname") or p.get("author") or "Reddit",
+                        "author": author_u,
                         "headline": title[:300],
                         "body": selftext or title,
                         "url": link,
+                        "image_url": image_url,
+                        "reddit_flair": reddit_flair,
                         "team_tags": team_tags,
                         "player_tags": extract_players(title),
                         "upvotes": int(p.get("score") or 0),
@@ -270,6 +325,7 @@ def save_to_supabase(items: list[dict]):
                 continue
             row = {k: v for k, v in item.items() if k in {
                 "source_name", "source_type", "author", "headline", "body", "url",
+                "image_url", "reddit_flair",
                 "team_tags", "player_tags", "published_at", "is_verified",
                 "upvotes", "comments", "views", "sentiment",
             }}

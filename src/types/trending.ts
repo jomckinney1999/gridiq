@@ -13,13 +13,26 @@ export type TrendingFeedItem = {
   authorHandle?: string;
   headline: string;
   body: string;
+  /** Longer preview (e.g. Reddit selftext) */
+  bodyFull?: string;
   playerTags: string[];
+  teamTags?: string[];
   engagement: { likes: number; reposts: number; views: number };
   timeAgo: string;
+  /** ISO from DB for sorting */
+  publishedAt?: string | null;
   url: string;
   sentiment: TrendingSentiment;
   isReddit?: boolean;
   isVerified?: boolean;
+  imageUrl?: string | null;
+  redditSubreddit?: string;
+  redditUsername?: string;
+  redditFlair?: string | null;
+  isTwitter?: boolean;
+  twitterDisplayHandle?: string;
+  twitterOrg?: string;
+  journalistColor?: string;
 };
 
 export type TrendingPlayer = {

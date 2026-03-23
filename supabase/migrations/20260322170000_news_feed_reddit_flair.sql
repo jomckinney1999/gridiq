@@ -1,0 +1,1 @@
+ALTER TABLE news_feed ADD COLUMN IF NOT EXISTS reddit_flair TEXT;

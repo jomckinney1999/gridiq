@@ -23,6 +23,7 @@ type NewsRow = {
   comments: number | null;
   views: number | null;
   is_verified: boolean | null;
+  reddit_flair?: string | null;
 };
 
 const BREAKING_TYPES = new Set(["ESPN", "NFL", "PFT", "NBC", "PFR", "BR", "PFF"]);

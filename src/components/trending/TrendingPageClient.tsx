@@ -6,7 +6,7 @@ import { safeText } from "@/lib/safe-text";
 import { TEAM_COLORS } from "@/lib/trending/team-colors";
 import { mapNewsFeedRow, type NewsFeedApiRow } from "@/lib/trending/news-feed-map";
 import type { TrendingApiResponse, TrendingFeedItem } from "@/types/trending";
-import { NewsCard } from "@/components/trending/NewsCard";
+import { FeaturedNewsCard, NewsFeedCard } from "@/components/trending/NewsCard";
 import { SourceFilters } from "@/components/trending/SourceFilters";
 import { TeamSidebar } from "@/components/trending/TeamSidebar";
 import { TrendingPlayerStrip } from "@/components/trending/TrendingPlayerStrip";
@@ -38,6 +38,17 @@ function splitColumns(feed: TrendingFeedItem[]) {
   const breaking = feed.filter((f) => OFFICIAL_TYPES.has(f.source));
   const social = feed.filter((f) => SOCIAL_TYPES.has(f.source));
   return { breaking, social };
+}
+
+/** Most recent official / breaking item by `publishedAt`. */
+function pickFeatured(feed: TrendingFeedItem[]): TrendingFeedItem | null {
+  const official = feed.filter((f) => OFFICIAL_TYPES.has(f.source));
+  official.sort((a, b) => {
+    const ta = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+    const tb = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+    return tb - ta;
+  });
+  return official[0] ?? null;
 }
 
 type TrendingPageClientProps = {
@@ -115,6 +126,13 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
   }, [feedItems, activeFilters]);
 
   const { breaking, social } = useMemo(() => splitColumns(filteredFeed), [filteredFeed]);
+
+  const featured = useMemo(() => pickFeatured(filteredFeed), [filteredFeed]);
+
+  const restBreaking = useMemo(() => {
+    if (!featured) return breaking;
+    return breaking.filter((b) => b.id !== featured.id);
+  }, [breaking, featured]);
 
   const teamColor = team === "ALL" ? "var(--green)" : TEAM_COLORS[team] ?? "var(--txt-2)";
 
@@ -225,20 +243,25 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                   No stories match the selected filters. Try All Sources or adjust filters.
                 </p>
               ) : (
-                <div className="grid gap-8 lg:grid-cols-2">
-                  <section>
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
+                  {featured ? (
+                    <div className="lg:col-span-2">
+                      <FeaturedNewsCard item={featured} />
+                    </div>
+                  ) : null}
+                  <section className="min-w-0 lg:col-span-1">
                     <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)]">
                       Breaking &amp; official
                     </h2>
                     <div className="flex flex-col gap-4">
-                      {breaking.length === 0 ? (
+                      {restBreaking.length === 0 ? (
                         <p className="text-[13px] text-[var(--txt-muted)]">No items in this column for current filters.</p>
                       ) : (
-                        breaking.map((item) => <NewsCard key={item.id} item={item} />)
+                        restBreaking.map((item) => <NewsFeedCard key={item.id} item={item} />)
                       )}
                     </div>
                   </section>
-                  <section>
+                  <section className="min-w-0 lg:col-span-1">
                     <h2 className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)]">
                       Social &amp; community
                     </h2>
@@ -246,7 +269,7 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                       {social.length === 0 ? (
                         <p className="text-[13px] text-[var(--txt-muted)]">No items in this column for current filters.</p>
                       ) : (
-                        social.map((item) => <NewsCard key={item.id} item={item} />)
+                        social.map((item) => <NewsFeedCard key={item.id} item={item} />)
                       )}
                     </div>
                   </section>
