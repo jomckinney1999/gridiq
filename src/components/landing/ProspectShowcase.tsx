@@ -102,7 +102,7 @@ export function ProspectShowcase() {
             {/* Cinematic right-side background image */}
             <div
               aria-hidden
-              className="pointer-events-none absolute right-0 top-0 h-full w-[180px]"
+              className="pointer-events-none absolute right-0 top-0 h-full w-[180px] bg-[var(--bg-card)]"
             >
               <Image
                 src="/players/fernando-mendoza.png"
@@ -110,13 +110,12 @@ export function ProspectShowcase() {
                 fill
                 priority={false}
                 sizes="180px"
-                className="object-cover object-top [image-rendering:pixelated]"
-                style={{ imageRendering: "pixelated" }}
-              />
-              <div
-                className="absolute inset-0"
+                className="prospect-image object-cover [image-rendering:pixelated]"
                 style={{
-                  background: "linear-gradient(to left, transparent 0%, var(--bg-card) 55%)",
+                  objectPosition: "top center",
+                  imageRendering: "pixelated",
+                  maskImage: "linear-gradient(to right, transparent 0%, black 35%)",
+                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 35%)",
                 }}
               />
             </div>
