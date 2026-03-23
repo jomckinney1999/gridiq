@@ -14,6 +14,7 @@ import { AIResponseCard } from "@/components/search/AIResponseCard";
 import { DataTable } from "@/components/search/DataTable";
 import { FollowUpSuggestions } from "@/components/search/FollowUpSuggestions";
 import { StatCardGrid } from "@/components/search/StatCardGrid";
+import { rgbaFromHex } from "@/lib/color";
 import { normalizeQueryResponse } from "@/lib/normalizeQueryResponse";
 import type { GridIQAPIResponse } from "@/types/gridiq-query";
 
@@ -60,6 +61,65 @@ function HeroResultsSkeleton() {
 
 type Accent = "green" | "orange" | "blue" | "purple";
 
+const BROWSER_MOCKUP_PLAYERS = [
+  {
+    name: "Jayden Daniels",
+    position: "QB",
+    team: "Washington Commanders",
+    grade: "92.1",
+    accent: "green" as const,
+    image: "/players/jayden-daniels.png",
+    teamBg: "#5a1414",
+    bars: [
+      { label: "Passing", value: 91 },
+      { label: "Running", value: 88 },
+      { label: "Pressure", value: 84 },
+    ],
+  },
+  {
+    name: "CeeDee Lamb",
+    position: "WR",
+    team: "Dallas Cowboys",
+    grade: "94.8",
+    accent: "blue" as const,
+    image: "/players/ceedee-lamb.png",
+    teamBg: "#003594",
+    bars: [
+      { label: "YPRR", value: 98 },
+      { label: "Target", value: 96 },
+      { label: "EPA", value: 94 },
+    ],
+  },
+  {
+    name: "Rueben Bain",
+    position: "DT/DE",
+    team: "2025 Draft",
+    grade: "B+",
+    accent: "purple" as const,
+    image: "/players/reuben-bain.png",
+    teamBg: "#f47321",
+    bars: [
+      { label: "PR Win", value: 82 },
+      { label: "Motor", value: 94 },
+      { label: "Run D", value: 55 },
+    ],
+  },
+  {
+    name: "Fernando Mendoza",
+    position: "QB",
+    team: "Indiana Hoosiers",
+    grade: "91.6",
+    accent: "orange" as const,
+    image: "/players/fernando-mendoza.png",
+    teamBg: "#990000",
+    bars: [
+      { label: "Comp%", value: 91 },
+      { label: "YPA", value: 88 },
+      { label: "TD/INT", value: 85 },
+    ],
+  },
+] as const;
+
 function AccentLine({ accent }: { accent: Accent }) {
   const from =
     accent === "green"
@@ -82,33 +142,28 @@ function AccentLine({ accent }: { accent: Accent }) {
 function PlayerImage({
   src,
   alt,
-  accent,
+  teamBg,
 }: {
   src: string;
   alt: string;
-  accent: Accent;
+  teamBg: string;
 }) {
-  const border =
-    accent === "green"
-      ? "rgba(0,255,135,0.30)"
-      : accent === "orange"
-        ? "rgba(255,107,43,0.30)"
-        : accent === "blue"
-          ? "rgba(59,158,255,0.30)"
-          : "rgba(168,85,247,0.30)";
-
   return (
     <div
-      className="relative h-12 w-12 overflow-hidden rounded-[10px] border bg-[#111116]"
-      style={{ borderColor: border }}
+      className="relative h-14 w-14 shrink-0 overflow-hidden rounded-[10px] border"
+      style={{
+        backgroundColor: teamBg,
+        borderColor: rgbaFromHex(teamBg, 0.6),
+      }}
     >
       <Image
         src={src}
         alt={alt}
         fill
-        sizes="48px"
+        sizes="56px"
         priority
-        className="object-cover object-top"
+        className="object-cover object-top [image-rendering:pixelated]"
+        style={{ imageRendering: "pixelated" }}
       />
     </div>
   );
@@ -116,12 +171,10 @@ function PlayerImage({
 
 function AttributeBar({
   label,
-  value,
   pct,
   accent,
 }: {
   label: string;
-  value: string;
   pct: number;
   accent: Accent;
 }) {
@@ -139,7 +192,7 @@ function AttributeBar({
         <span className="text-[9px] font-semibold uppercase tracking-[0.5px] text-[#44445a]">
           {label}
         </span>
-        <span className="text-[9px] font-semibold text-[#8888a0]">{value}</span>
+        <span className="text-[9px] font-semibold text-[#8888a0]">{pct}%</span>
       </div>
       <div className="h-[3px] overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
         <div
@@ -158,15 +211,15 @@ function PlayerCard({
   grade,
   bars,
   imageSrc,
-  teamLogoSrc,
+  teamBg,
 }: {
   accent: Accent;
   name: string;
   meta: string;
   grade: string;
-  bars: Array<{ label: string; value: string; pct: number }>;
+  bars: Array<{ label: string; value: number }>;
   imageSrc: string;
-  teamLogoSrc?: string;
+  teamBg: string;
 }) {
   const color =
     accent === "green"
@@ -181,26 +234,13 @@ function PlayerCard({
     <div className="relative flex min-w-[240px] flex-1 flex-col gap-3 p-4 sm:min-w-0">
       <AccentLine accent={accent} />
       <div className="flex items-center gap-3">
-        <PlayerImage src={imageSrc} alt={name} accent={accent} />
+        <PlayerImage src={imageSrc} alt={name} teamBg={teamBg} />
         <div className="min-w-0">
           <div className="truncate text-[13px] font-bold text-[#f2f2f5]">
             {name}
           </div>
-          <div className="flex items-center gap-2">
-            {teamLogoSrc ? (
-              <span className="relative h-4 w-4 overflow-hidden rounded-[4px] border border-[rgba(255,255,255,0.10)] bg-[#0d0d10]">
-                <Image
-                  src={teamLogoSrc}
-                  alt=""
-                  fill
-                  sizes="16px"
-                  className="object-contain"
-                />
-              </span>
-            ) : null}
-            <div className="text-[10px] font-semibold uppercase tracking-[0.6px] text-[#44445a]">
-              {meta}
-            </div>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.6px] text-[#44445a]">
+            {meta}
           </div>
         </div>
       </div>
@@ -222,8 +262,7 @@ function PlayerCard({
           <AttributeBar
             key={b.label}
             label={b.label}
-            value={b.value}
-            pct={b.pct}
+            pct={b.value}
             accent={accent}
           />
         ))}
@@ -588,57 +627,18 @@ export function Hero() {
 
                   <div className="mt-4 overflow-x-auto">
                     <div className="grid min-w-[980px] grid-cols-4 divide-x divide-[rgba(255,255,255,0.06)] rounded-[14px] border border-[rgba(255,255,255,0.06)] bg-[#111116]">
-                      <PlayerCard
-                        accent="green"
-                        name="Jayden Daniels"
-                        meta="QB · Washington"
-                        grade="92.1"
-                        imageSrc="/players/qb.jpg"
-                        teamLogoSrc="https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png"
-                        bars={[
-                          { label: "Passing", value: "91%", pct: 91 },
-                          { label: "Running", value: "88%", pct: 88 },
-                          { label: "Pressure", value: "84%", pct: 84 },
-                        ]}
-                      />
-                      <PlayerCard
-                        accent="orange"
-                        name="Jaylen Waddle"
-                        meta="WR · Miami"
-                        grade="87.4"
-                        imageSrc="/players/wr.jpg"
-                        teamLogoSrc="https://a.espncdn.com/i/teamlogos/nfl/500/mia.png"
-                        bars={[
-                          { label: "Routes", value: "85%", pct: 85 },
-                          { label: "Sep", value: "82%", pct: 82 },
-                          { label: "YAC", value: "79%", pct: 79 },
-                        ]}
-                      />
-                      <PlayerCard
-                        accent="blue"
-                        name="CeeDee Lamb"
-                        meta="WR · Dallas"
-                        grade="94.8"
-                        imageSrc="/players/wr.jpg"
-                        teamLogoSrc="https://a.espncdn.com/i/teamlogos/nfl/500/dal.png"
-                        bars={[
-                          { label: "YPRR", value: "98%", pct: 98 },
-                          { label: "Target", value: "96%", pct: 96 },
-                          { label: "EPA", value: "94%", pct: 94 },
-                        ]}
-                      />
-                      <PlayerCard
-                        accent="purple"
-                        name="Rueben Bain"
-                        meta="DT/DE · 2025 Draft"
-                        grade="B+"
-                        imageSrc="/players/dt.jpg"
-                        bars={[
-                          { label: "PR Win", value: "82%", pct: 82 },
-                          { label: "Motor", value: "94%", pct: 94 },
-                          { label: "Run D", value: "55%", pct: 55 },
-                        ]}
-                      />
+                      {BROWSER_MOCKUP_PLAYERS.map((p) => (
+                        <PlayerCard
+                          key={p.name}
+                          accent={p.accent}
+                          name={p.name}
+                          meta={`${p.position} · ${p.team}`}
+                          grade={p.grade}
+                          imageSrc={p.image}
+                          teamBg={p.teamBg}
+                          bars={[...p.bars]}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>

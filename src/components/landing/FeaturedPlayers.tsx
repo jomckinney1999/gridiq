@@ -1,52 +1,59 @@
 import Image from "next/image";
+import Link from "next/link";
 
 type Accent = "green" | "orange" | "blue" | "purple";
 
-type Player = {
+type FeaturedPlayer = {
+  id: string;
   name: string;
   pos: string;
   team: string;
   grade: string;
   accent: Accent;
-  imageSrc: string;
-  teamLogoSrc?: string;
+  image: string;
+  teamBg: string;
 };
 
-const players: Player[] = [
+const featuredPlayers: FeaturedPlayer[] = [
   {
+    id: "jayden-daniels",
     name: "Jayden Daniels",
     pos: "QB",
-    team: "Washington",
+    team: "Washington Commanders",
     grade: "92.1",
     accent: "green",
-    imageSrc: "/players/qb.jpg",
-    teamLogoSrc: "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
+    image: "/players/jayden-daniels.png",
+    teamBg: "#5a1414",
   },
   {
-    name: "Jaylen Waddle",
-    pos: "WR",
-    team: "Miami",
-    grade: "87.4",
-    accent: "orange",
-    imageSrc: "/players/wr.jpg",
-    teamLogoSrc: "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
-  },
-  {
+    id: "ceedee-lamb",
     name: "CeeDee Lamb",
     pos: "WR",
-    team: "Dallas",
+    team: "Dallas Cowboys",
     grade: "94.8",
     accent: "blue",
-    imageSrc: "/players/wr.jpg",
-    teamLogoSrc: "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
+    image: "/players/ceedee-lamb.png",
+    teamBg: "#003594",
   },
   {
+    id: "rueben-bain",
     name: "Rueben Bain",
     pos: "DT/DE",
     team: "2025 Draft",
     grade: "B+",
     accent: "purple",
-    imageSrc: "/players/dt.jpg",
+    image: "/players/reuben-bain.png",
+    teamBg: "#f47321",
+  },
+  {
+    id: "fernando-mendoza",
+    name: "Fernando Mendoza",
+    pos: "QB",
+    team: "Indiana Hoosiers",
+    grade: "91.6",
+    accent: "orange",
+    image: "/players/fernando-mendoza.png",
+    teamBg: "#990000",
   },
 ];
 
@@ -69,28 +76,39 @@ export function FeaturedPlayers() {
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
           <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
-            Featured Players
+            This Week
           </div>
           <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[32px]">
-            Real imagery, premium cards
+            Featured Players
           </h2>
-          <p className="mt-3 text-[13px] leading-relaxed text-[#8888a0]">
-            Cinematic visuals with neon-grade clarity — designed for quick scanning.
-          </p>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {players.map((p) => {
+          {featuredPlayers.map((p) => {
             const c = accentColor(p.accent);
             return (
-              <div
-                key={p.name}
-                className="group relative h-[280px] overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] transition duration-200 ease-out hover:border-[rgba(255,255,255,0.10)]"
+              <Link
+                key={p.id}
+                href={`/player/${p.id}`}
+                className="group relative block h-[260px] overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] transition duration-200 ease-out"
               >
+                {/* Hover: accent border */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 z-30 rounded-[14px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                  style={{ boxShadow: `inset 0 0 0 1px ${c}` }}
+                />
+
                 {/* Top accent line */}
                 <div
-                  className="absolute inset-x-0 top-0 h-[2px]"
+                  className="absolute inset-x-0 top-0 z-10 h-[2px]"
                   style={{ background: `linear-gradient(90deg, ${c}, transparent)` }}
+                />
+
+                {/* Team color dot */}
+                <div
+                  className="absolute left-3 top-3 z-20 h-2.5 w-2.5 rounded-full ring-2 ring-[rgba(0,0,0,0.45)]"
+                  style={{ backgroundColor: p.teamBg }}
                 />
 
                 {/* Grade badge */}
@@ -105,53 +123,36 @@ export function FeaturedPlayers() {
                   {p.grade}
                 </div>
 
-                {/* Team logo (top-left) */}
-                {p.teamLogoSrc ? (
-                  <div className="absolute left-3 top-3 z-20">
-                    <div className="relative h-8 w-8 overflow-hidden rounded-[10px] border border-[rgba(255,255,255,0.10)] bg-[#0d0d10]">
-                      <Image
-                        src={p.teamLogoSrc}
-                        alt={`${p.team} logo`}
-                        fill
-                        sizes="32px"
-                        className="object-contain p-1"
-                      />
-                    </div>
-                  </div>
-                ) : null}
-
-                {/* Image top 60% */}
-                <div className="relative h-[60%] w-full overflow-hidden">
+                {/* Top 55% — pixel art */}
+                <div
+                  className="relative h-[55%] w-full overflow-hidden"
+                  style={{ backgroundColor: p.teamBg }}
+                >
                   <Image
-                    src={p.imageSrc}
+                    src={p.image}
                     alt={p.name}
                     fill
                     sizes="(max-width: 1024px) 100vw, 25vw"
-                    className="object-cover object-top transition-transform duration-300 ease-out group-hover:scale-[1.05]"
+                    className="object-cover object-top transition-transform duration-300 ease-out [image-rendering:pixelated] group-hover:scale-[1.08]"
+                    style={{ imageRendering: "pixelated" }}
                     priority={false}
                   />
                 </div>
 
-                {/* Bottom gradient overlay + text */}
-                <div className="relative h-[40%]">
+                {/* Bottom 45% — gradient + text */}
+                <div className="relative h-[45%]">
                   <div
                     aria-hidden
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(to top, rgba(5,5,7,1) 0%, rgba(5,5,7,0) 90%)",
-                    }}
+                    className="absolute inset-0 bg-gradient-to-t from-[#0d0d10] via-[#0d0d10]/80 to-transparent"
                   />
-                  <div className="absolute inset-x-0 bottom-0 p-4">
-                    <div className="text-[14px] font-bold text-[#f2f2f5]">
-                      {p.name}
-                    </div>
-                    <div className="mt-1 text-[11px] font-semibold uppercase tracking-[0.6px] text-[#8888a0]">
+                  <div className="absolute inset-x-0 bottom-0 z-10 p-4">
+                    <div className="text-[16px] font-bold text-[#f2f2f5]">{p.name}</div>
+                    <div className="mt-1 text-[12px] text-[#8888a0]">
                       {p.pos} · {p.team}
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -159,4 +160,3 @@ export function FeaturedPlayers() {
     </section>
   );
 }
-

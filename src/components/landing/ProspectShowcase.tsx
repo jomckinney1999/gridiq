@@ -110,18 +110,18 @@ export function ProspectShowcase() {
               className="pointer-events-none absolute right-0 top-0 h-full w-[180px]"
             >
               <Image
-                src="/players/qb.jpg"
+                src="/players/fernando-mendoza.png"
                 alt=""
                 fill
                 priority={false}
                 sizes="180px"
-                className="object-cover object-top"
+                className="object-cover object-top [image-rendering:pixelated]"
+                style={{ imageRendering: "pixelated" }}
               />
               <div
                 className="absolute inset-0"
                 style={{
-                  background:
-                    "linear-gradient(to left, transparent 0%, #0d0d10 60%)",
+                  background: "linear-gradient(to left, transparent 0%, #0d0d10 55%)",
                 }}
               />
             </div>
