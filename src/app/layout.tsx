@@ -7,6 +7,17 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const THEME_INIT_SCRIPT = `
+(function() {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  } catch(e) {}
+})();
+`;
+
 export const metadata: Metadata = {
   title: "NFL Stat Guru — Advanced NFL Analytics",
   description:
@@ -19,7 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body className={`${inter.variable} antialiased`}>{children}</body>
     </html>
   );

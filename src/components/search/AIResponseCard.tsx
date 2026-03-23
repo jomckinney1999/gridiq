@@ -18,7 +18,7 @@ function renderBold(text: string) {
     const m = part.match(/^\*\*(.+)\*\*$/);
     if (m) {
       return (
-        <strong key={i} className="font-semibold text-[#f2f2f5]">
+        <strong key={i} className="font-semibold text-[var(--txt)]">
           {m[1]}
         </strong>
       );
@@ -38,12 +38,15 @@ function leftAccent(
     lower.includes("turnover") ||
     lower.includes("int ");
   if (turnoverish) {
-    return { border: "border-l-[#ff6b2b]", avatar: "from-[#ff6b2b] to-[#ff9b5a]" };
+    return {
+      border: "border-l-[var(--orange)]",
+      avatar: "from-[var(--orange)] to-[color-mix(in_srgb,var(--orange)_75%,var(--txt)_25%)]",
+    };
   }
   if (intent === "general") {
-    return { border: "border-l-[#3b9eff]", avatar: "from-[#3b9eff] to-[#00ff87]" };
+    return { border: "border-l-[var(--blue)]", avatar: "from-[var(--blue)] to-[var(--green)]" };
   }
-  return { border: "border-l-[#00ff87]", avatar: "from-[#00ff87] to-[#3b9eff]" };
+  return { border: "border-l-[var(--green)]", avatar: "from-[var(--green)] to-[var(--blue)]" };
 }
 
 export function AIResponseCard({ response }: { response: GridIQAPIResponse }) {
@@ -53,24 +56,24 @@ export function AIResponseCard({ response }: { response: GridIQAPIResponse }) {
 
   return (
     <article
-      className={`rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[#0d0d10] p-4 ${border} border-l-2`}
+      className={`rounded-xl border-[0.5px] border-[var(--border)] bg-[var(--bg-card)] p-4 ${border} border-l-2`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           <div
-            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md bg-gradient-to-br ${avatar} text-[8px] font-black leading-none tracking-tighter text-[#050507]`}
+            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md bg-gradient-to-br ${avatar} text-[8px] font-black leading-none tracking-tighter text-[var(--on-green)]`}
           >
             SG
           </div>
-          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#00ff87]">
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--green)]">
             Guru Analysis
           </div>
         </div>
-        <span className="shrink-0 rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#66667a]">
+        <span className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--bg-subtle)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--txt-muted)]">
           {badge}
         </span>
       </div>
-      <p className="mt-3 text-[14px] leading-[1.7] text-[#8888a0]">
+      <p className="mt-3 text-[14px] leading-[1.7] text-[var(--txt-2)]">
         {renderBold(response.response_text ?? "")}
       </p>
     </article>

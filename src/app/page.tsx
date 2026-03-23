@@ -8,7 +8,7 @@ import { TopNav } from "@/components/landing/TopNav";
 
 export default function HomePage() {
   return (
-    <div className="min-h-dvh bg-[#050507] text-[#f2f2f5]">
+    <div className="min-h-dvh bg-[var(--bg-base)] text-[var(--txt)]">
       <TopNav />
       <main className="pt-[72px]">
         <ScrollingBanner />

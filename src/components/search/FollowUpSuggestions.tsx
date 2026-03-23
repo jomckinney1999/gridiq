@@ -10,14 +10,14 @@ export function FollowUpSuggestions({ suggestions, onPick }: FollowUpSuggestions
 
   return (
     <div>
-      <div className="text-[11px] font-medium text-[#44445a]">Ask a follow-up</div>
+      <div className="text-[11px] font-medium text-[var(--txt-3)]">Ask a follow-up</div>
       <div className="mt-2 flex flex-wrap gap-2">
         {suggestions.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => onPick(s)}
-            className="rounded-full border border-[rgba(255,255,255,0.1)] bg-transparent px-3 py-1.5 text-left text-[12px] text-[#8888a0] transition hover:border-[rgba(0,255,135,0.35)] hover:bg-[rgba(0,255,135,0.06)] hover:text-[#00ff87]"
+            className="rounded-full border border-[var(--border-md)] bg-transparent px-3 py-1.5 text-left text-[12px] text-[var(--txt-2)] transition hover:border-[var(--green-border)] hover:bg-[var(--green-light)] hover:text-[var(--green)]"
           >
             {s}
           </button>

@@ -10,28 +10,28 @@ const TIER_ACCENTS: Record<
 > = {
   S: {
     label: "S",
-    bar: "bg-[#00ff87]",
-    text: "text-[#050507]",
+    bar: "bg-[var(--green)]",
+    text: "text-[var(--on-green)]",
   },
   A: {
     label: "A",
-    bar: "bg-[#3b9eff]",
-    text: "text-white",
+    bar: "bg-[var(--blue)]",
+    text: "text-[var(--inverse)]",
   },
   B: {
     label: "B",
-    bar: "bg-[#a855f7]",
-    text: "text-white",
+    bar: "bg-[var(--purple)]",
+    text: "text-[var(--inverse)]",
   },
   C: {
     label: "C",
-    bar: "bg-[#ff6b2b]",
-    text: "text-[#050507]",
+    bar: "bg-[var(--orange)]",
+    text: "text-[var(--on-green)]",
   },
   D: {
     label: "D",
-    bar: "bg-[#ef4444]",
-    text: "text-white",
+    bar: "bg-[var(--red-accent)]",
+    text: "text-[var(--inverse)]",
   },
 };
 
@@ -67,8 +67,8 @@ export function TierRow({
       className={cn(
         "flex min-h-[88px] gap-0 overflow-hidden rounded-xl border transition-all duration-200",
         dropHighlight
-          ? "border-[#00ff87] bg-[rgba(0,255,135,0.08)] shadow-[0_0_24px_rgba(0,255,135,0.12)]"
-          : "border-[rgba(255,255,255,0.06)] bg-[#0d0d10]",
+          ? "border-[var(--green)] bg-[var(--green-light)] shadow-[var(--shadow-glow-g)]"
+          : "border-[var(--border)] bg-[var(--bg-card)]",
       )}
       onDragOver={readOnly ? undefined : onDragOver}
       onDragLeave={readOnly ? undefined : onDragLeave}

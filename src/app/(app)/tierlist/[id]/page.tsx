@@ -84,10 +84,10 @@ export default function SharedTierListPage() {
   if (error && !loading) {
     return (
       <div className="mx-auto max-w-lg px-4 py-16 text-center">
-        <p className="text-[14px] text-[#ff6b2b]">{error}</p>
+        <p className="text-[14px] text-[var(--orange)]">{error}</p>
         <Link
           href="/tierlist"
-          className="mt-6 inline-block text-[13px] font-semibold text-[#00ff87] hover:underline"
+          className="mt-6 inline-block text-[13px] font-semibold text-[var(--green)] hover:underline"
         >
           ← Tier list maker
         </Link>
@@ -100,7 +100,7 @@ export default function SharedTierListPage() {
       <div className="mx-auto max-w-4xl px-4 py-12">
         <div className="space-y-2">
           {[0, 1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-[88px] animate-pulse rounded-xl bg-[rgba(255,255,255,0.04)]" />
+            <div key={i} className="h-[88px] animate-pulse rounded-xl bg-[var(--bg-subtle)]" />
           ))}
         </div>
       </div>
@@ -109,15 +109,15 @@ export default function SharedTierListPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-      <div className="border-b border-[rgba(255,255,255,0.06)] pb-4">
-        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#00ff87]">
+      <div className="border-b border-[var(--border)] pb-4">
+        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--green)]">
           Shared tier list
         </p>
-        <h1 className="mt-2 text-[22px] font-extrabold text-[#f2f2f5]">{data.title}</h1>
-        <p className="mt-2 text-[12px] text-[#8888a0]">
+        <h1 className="mt-2 text-[22px] font-extrabold text-[var(--txt)]">{data.title}</h1>
+        <p className="mt-2 text-[12px] text-[var(--txt-2)]">
           {data.position_filter} · {created}
           {typeof data.views === "number" ? (
-            <span className="text-[#55556a]"> · {data.views.toLocaleString()} views</span>
+            <span className="text-[var(--txt-muted)]"> · {data.views.toLocaleString()} views</span>
           ) : null}
         </p>
       </div>
@@ -135,14 +135,14 @@ export default function SharedTierListPage() {
         ))}
       </div>
 
-      <div className="mt-12 rounded-xl border border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.05)] px-4 py-6 text-center">
-        <p className="text-[14px] font-semibold text-[#f2f2f5]">Build your own NFL tier list</p>
-        <p className="mt-1 text-[12px] text-[#8888a0]">
+      <div className="mt-12 rounded-xl border border-[var(--green-border)] bg-[color-mix(in_srgb,var(--green)_5%,transparent)] px-4 py-6 text-center">
+        <p className="text-[14px] font-semibold text-[var(--txt)]">Build your own NFL tier list</p>
+        <p className="mt-1 text-[12px] text-[var(--txt-2)]">
           Drag real players, publish, and share — free on NFL Stat Guru.
         </p>
         <Link
           href="/tierlist"
-          className="mt-4 inline-flex rounded-full bg-[#00ff87] px-6 py-2.5 text-[13px] font-bold text-[#050507] transition hover:brightness-110"
+          className="mt-4 inline-flex rounded-full bg-[var(--green)] px-6 py-2.5 text-[13px] font-bold text-[var(--on-green)] transition hover:brightness-110"
         >
           Make your own
         </Link>

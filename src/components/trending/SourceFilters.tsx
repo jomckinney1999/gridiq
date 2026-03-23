@@ -42,8 +42,8 @@ export function SourceFilters({ active, onToggle }: SourceFiltersProps) {
             className={cn(
               "rounded-full border px-3 py-1.5 text-[12px] font-semibold transition-colors",
               on
-                ? "border-[rgba(0,255,135,0.45)] bg-[rgba(0,255,135,0.12)] text-[#00ff87]"
-                : "border-[rgba(255,255,255,0.08)] bg-[#0d0d10] text-[#8888a0] hover:border-[rgba(255,255,255,0.14)] hover:text-[#b8b8c8]",
+                ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
+                : "border-[var(--border)] bg-[var(--bg-card)] text-[var(--txt-2)] hover:border-[var(--border-md)] hover:text-[var(--txt-2)]",
             )}
           >
             {LABELS[id] ?? id}

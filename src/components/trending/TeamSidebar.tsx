@@ -29,15 +29,15 @@ export function TeamSidebar() {
   }
 
   return (
-    <aside className="flex max-h-[min(42vh,320px)] min-h-0 w-full shrink-0 flex-col border-b border-[rgba(255,255,255,0.06)] bg-[#0d0d10] md:h-full md:max-h-none md:w-[196px] md:border-b-0 md:border-r">
+    <aside className="flex max-h-[min(42vh,320px)] min-h-0 w-full shrink-0 flex-col border-b border-[var(--border)] bg-[var(--bg-card)] md:h-full md:max-h-none md:w-[196px] md:border-b-0 md:border-r">
       <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-2 py-4">
         <Link
           href="/trending"
           className={cn(
             "mb-3 rounded-lg px-2 py-2 text-[12px] font-semibold transition-colors",
             isActive("ALL")
-              ? "bg-[rgba(0,255,135,0.08)] text-[#00ff87]"
-              : "text-[#b8b8c8] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#f2f2f5]",
+              ? "bg-[var(--green-light)] text-[var(--green)]"
+              : "text-[var(--txt-2)] hover:bg-[color-mix(in_srgb,var(--txt)_4%,transparent)] hover:text-[var(--txt)]",
           )}
         >
           All NFL
@@ -45,7 +45,7 @@ export function TeamSidebar() {
 
         {NFL_DIVISIONS.map((div) => (
           <div key={div.id} className="mb-4">
-            <div className="px-2 text-[9px] font-bold uppercase tracking-[0.14em] text-[#55556a]">
+            <div className="px-2 text-[9px] font-bold uppercase tracking-[0.14em] text-[var(--txt-muted)]">
               {div.label}
             </div>
             <nav className="mt-1.5 flex flex-col gap-0.5">
@@ -58,8 +58,8 @@ export function TeamSidebar() {
                     className={cn(
                       "flex items-center gap-2 rounded-lg px-2 py-1.5 text-[12px] font-semibold transition-colors",
                       active
-                        ? "bg-[rgba(0,255,135,0.08)] text-[#00ff87]"
-                        : "text-[#b8b8c8] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#f2f2f5]",
+                        ? "bg-[var(--green-light)] text-[var(--green)]"
+                        : "text-[var(--txt-2)] hover:bg-[color-mix(in_srgb,var(--txt)_4%,transparent)] hover:text-[var(--txt)]",
                     )}
                   >
                     <span

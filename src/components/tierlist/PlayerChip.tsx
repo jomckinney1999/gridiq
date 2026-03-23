@@ -40,7 +40,7 @@ export function PlayerChip({
         onDragStartPick?.();
       }}
       className={cn(
-        "group flex min-w-[140px] max-w-[180px] items-center gap-2 rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#111116] px-2 py-1.5",
+        "group flex min-w-[140px] max-w-[180px] items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg-card2)] px-2 py-1.5",
         !readOnly && "cursor-grab active:cursor-grabbing",
         dragging && "opacity-40",
       )}
@@ -52,10 +52,10 @@ export function PlayerChip({
         {playerInitials(player.name)}
       </span>
       <div className="min-w-0 flex-1">
-        <div className="truncate text-[11px] font-semibold leading-tight text-[#f2f2f5]">
+        <div className="truncate text-[11px] font-semibold leading-tight text-[var(--txt)]">
           {player.name}
         </div>
-        <div className="truncate text-[9px] text-[#55556a]">
+        <div className="truncate text-[9px] text-[var(--txt-muted)]">
           {player.team} · {player.position}
         </div>
       </div>
@@ -63,7 +63,7 @@ export function PlayerChip({
         <button
           type="button"
           aria-label={`Remove ${player.name}`}
-          className="shrink-0 rounded p-0.5 text-[12px] text-[#55556a] opacity-0 transition hover:text-[#ff6b2b] group-hover:opacity-100"
+          className="shrink-0 rounded p-0.5 text-[12px] text-[var(--txt-muted)] opacity-0 transition hover:text-[var(--orange)] group-hover:opacity-100"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -73,7 +73,7 @@ export function PlayerChip({
           ×
         </button>
       ) : !readOnly ? (
-        <span className="shrink-0 cursor-grab px-0.5 text-[10px] text-[#44445a]" title="Drag">
+        <span className="shrink-0 cursor-grab px-0.5 text-[10px] text-[var(--txt-3)]" title="Drag">
           ⋮⋮
         </span>
       ) : null}

@@ -40,8 +40,8 @@ export function TierListHeader({
             className={cn(
               "rounded-full border px-3 py-1.5 text-[11px] font-bold transition",
               positionFilter === p
-                ? "border-[rgba(0,255,135,0.45)] bg-[rgba(0,255,135,0.12)] text-[#00ff87]"
-                : "border-[rgba(255,255,255,0.1)] bg-[#111116] text-[#8888a0] hover:border-[rgba(255,255,255,0.18)]",
+                ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
+                : "border-[var(--border-md)] bg-[var(--bg-card2)] text-[var(--txt-2)] hover:border-[var(--border-md)]",
             )}
           >
             {p}
@@ -55,27 +55,27 @@ export function TierListHeader({
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder="Tier list title"
-          className="min-h-[44px] flex-1 rounded-xl border border-[rgba(255,255,255,0.1)] bg-[#0d0d10] px-4 text-[14px] font-semibold text-[#f2f2f5] outline-none placeholder:text-[#44445a] focus:border-[rgba(0,255,135,0.35)]"
+          className="min-h-[44px] flex-1 rounded-xl border border-[var(--border-md)] bg-[var(--bg-card)] px-4 text-[14px] font-semibold text-[var(--txt)] outline-none placeholder:text-[var(--txt-3)] focus:border-[var(--green-border)]"
         />
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             onClick={onReset}
-            className="rounded-full border border-[rgba(255,255,255,0.12)] px-4 py-2 text-[12px] font-semibold text-[#8888a0] transition hover:bg-[rgba(255,255,255,0.04)]"
+            className="rounded-full border border-[var(--border-md)] px-4 py-2 text-[12px] font-semibold text-[var(--txt-2)] transition hover:bg-[color-mix(in_srgb,var(--txt)_4%,transparent)]"
           >
             Reset
           </button>
           <button
             type="button"
             onClick={onShareLink}
-            className="rounded-full border border-[rgba(0,255,135,0.25)] px-4 py-2 text-[12px] font-semibold text-[#00ff87] transition hover:bg-[rgba(0,255,135,0.08)]"
+            className="rounded-full border border-[var(--green-border)] px-4 py-2 text-[12px] font-semibold text-[var(--green)] transition hover:bg-[var(--green-light)]"
           >
             Share link
           </button>
           <button
             type="button"
             onClick={onSaveImage}
-            className="rounded-full border border-[rgba(255,255,255,0.12)] px-4 py-2 text-[12px] font-semibold text-[#b8b8c8] transition hover:bg-[rgba(255,255,255,0.04)]"
+            className="rounded-full border border-[var(--border-md)] px-4 py-2 text-[12px] font-semibold text-[var(--txt-2)] transition hover:bg-[color-mix(in_srgb,var(--txt)_4%,transparent)]"
           >
             Save image
           </button>
@@ -83,7 +83,7 @@ export function TierListHeader({
             type="button"
             disabled={publishing}
             onClick={onPublish}
-            className="rounded-full bg-[#00ff87] px-4 py-2 text-[12px] font-bold text-[#050507] transition hover:brightness-110 disabled:opacity-50"
+            className="rounded-full bg-[var(--green)] px-4 py-2 text-[12px] font-bold text-[var(--on-green)] transition hover:brightness-110 disabled:opacity-50"
           >
             {publishing ? "Saving…" : "Save"}
           </button>
@@ -91,7 +91,7 @@ export function TierListHeader({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <span className="w-full text-[10px] font-bold uppercase tracking-[0.12em] text-[#44445a] lg:w-auto lg:py-2">
+        <span className="w-full text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)] lg:w-auto lg:py-2">
           Presets
         </span>
         {presets.map((p) => (
@@ -99,7 +99,7 @@ export function TierListHeader({
             key={p.id}
             type="button"
             onClick={p.onClick}
-            className="rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#111116] px-3 py-2 text-[11px] font-semibold text-[#b8b8c8] transition hover:border-[rgba(0,255,135,0.2)] hover:text-[#f2f2f5]"
+            className="rounded-lg border border-[var(--border)] bg-[var(--bg-card2)] px-3 py-2 text-[11px] font-semibold text-[var(--txt-2)] transition hover:border-[var(--green-border)] hover:text-[var(--txt)]"
           >
             {p.label}
           </button>

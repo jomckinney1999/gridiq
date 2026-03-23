@@ -1,44 +1,50 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
+/* LIGHT MODE (default) */
 :root {
-  /* NFL Stat Guru Design Tokens (PRD v1.0) */
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Backgrounds */
-  --bg-base: #050507;
-  --bg-card: #0d0d10;
-  --bg-card2: #111116;
-  --bg-hover: #1c1c21;
+  --bg-base: #f5f2ed;
+  --bg-secondary: #edeae4;
+  --bg-card: #ffffff;
+  --bg-card2: #faf8f5;
+  --bg-hover: #f0ede8;
+  --border: rgba(0, 0, 0, 0.07);
+  --border-md: rgba(0, 0, 0, 0.12);
+  --border-lg: rgba(0, 0, 0, 0.16);
+  --txt: #1a1a1a;
+  --txt-2: #5a5a5a;
+  --txt-3: #9a9a9a;
+  --txt-muted: #6a6a6a;
+  --green: #00a854;
+  --green-light: #e8f7ef;
+  --green-border: rgba(0, 168, 84, 0.2);
+  --orange: #d44a00;
+  --orange-light: #fff0e8;
+  --blue: #1a6fd4;
+  --blue-light: #e8f0fb;
+  --purple: #7c3aed;
+  --purple-light: #f3eeff;
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.1);
+  --on-green: #ffffff;
+  --inverse: #ffffff;
 
-  /* Borders */
-  --border: rgba(255, 255, 255, 0.06);
-  --border-md: rgba(255, 255, 255, 0.1);
-  --border-lg: rgba(255, 255, 255, 0.16);
+  /* Legacy PRD aliases → theme tokens */
+  --neon-green: var(--green);
+  --neon-orange: var(--orange);
+  --neon-blue: var(--blue);
+  --neon-purple: var(--purple);
+  --g-glow: color-mix(in srgb, var(--green) 25%, transparent);
+  --o-glow: color-mix(in srgb, var(--orange) 25%, transparent);
+  --b-glow: color-mix(in srgb, var(--blue) 20%, transparent);
 
-  /* Text */
-  --txt: #f2f2f5;
-  --txt-2: #8888a0;
-  --txt-3: #44445a;
-
-  /* Accent Colors */
-  --neon-green: #00ff87;
-  --neon-orange: #ff6b2b;
-  --neon-blue: #3b9eff;
-  --neon-purple: #a855f7;
-
-  /* Glow layers */
-  --g-glow: rgba(0, 255, 135, 0.25);
-  --o-glow: rgba(255, 107, 43, 0.25);
-  --b-glow: rgba(59, 158, 255, 0.2);
-
-  /* A few useful derived tokens (still PRD-faithful) */
   --shadow-glow-g: 0 0 20px var(--g-glow);
   --shadow-glow-o: 0 0 20px var(--o-glow);
   --shadow-glow-b: 0 0 20px var(--b-glow);
-  --shadow-glow-soft: 0 0 40px rgba(0, 0, 0, 0.45);
+  --shadow-glow-soft: var(--shadow-md);
 
-  /* Type scale */
   --text-hero: clamp(40px, 6vw, 64px);
   --text-h1: clamp(28px, 4vw, 40px);
   --text-h2: clamp(20px, 3vw, 28px);
@@ -48,17 +54,71 @@
   --text-xs: 11px;
   --text-stat: clamp(24px, 3vw, 36px);
 
-  /* Motion + shape (derived primitives; do not change PRD colors) */
   --radius-sm: 10px;
   --radius-md: 14px;
   --radius-lg: 18px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  /* Visual language primitives (PRD §2.3) */
-  --grid-line: rgba(255, 255, 255, 0.045); /* ~3–5% after masking/opacity */
+  --grid-line: rgba(0, 0, 0, 0.06);
   --grid-size: 48px;
+  --glass: color-mix(in srgb, var(--bg-card) 72%, transparent);
+  --overlay-scrim: rgba(15, 15, 15, 0.45);
+  --bg-subtle: rgba(0, 0, 0, 0.035);
+  --bg-subtle-2: rgba(0, 0, 0, 0.06);
+  --red-accent: #ef4444;
+  --chrome-red: #ff5f57;
+  --chrome-yellow: #febc2e;
+  --chrome-green: #28c840;
+}
+
+/* DARK MODE */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-base: #050507;
+  --bg-secondary: #0d0d10;
+  --bg-card: #0d0d10;
+  --bg-card2: #111116;
+  --bg-hover: #1c1c21;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-md: rgba(255, 255, 255, 0.1);
+  --border-lg: rgba(255, 255, 255, 0.16);
+  --txt: #f2f2f5;
+  --txt-2: #8888a0;
+  --txt-3: #44445a;
+  --txt-muted: #55556a;
+  --green: #00ff87;
+  --green-light: rgba(0, 255, 135, 0.08);
+  --green-border: rgba(0, 255, 135, 0.25);
+  --orange: #ff6b2b;
+  --orange-light: rgba(255, 107, 43, 0.08);
+  --blue: #3b9eff;
+  --blue-light: rgba(59, 158, 255, 0.08);
+  --purple: #a855f7;
+  --purple-light: rgba(168, 85, 247, 0.08);
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --on-green: #050507;
+  --inverse: #ffffff;
+
+  --g-glow: color-mix(in srgb, var(--green) 25%, transparent);
+  --o-glow: color-mix(in srgb, var(--orange) 25%, transparent);
+  --b-glow: color-mix(in srgb, var(--blue) 20%, transparent);
+  --shadow-glow-g: 0 0 20px var(--g-glow);
+  --shadow-glow-o: 0 0 20px var(--o-glow);
+  --shadow-glow-b: 0 0 20px var(--b-glow);
+  --shadow-glow-soft: 0 0 40px rgba(0, 0, 0, 0.45);
+
+  --grid-line: rgba(255, 255, 255, 0.045);
   --glass: rgba(13, 13, 16, 0.55);
+  --overlay-scrim: rgba(0, 0, 0, 0.6);
+  --bg-subtle: rgba(255, 255, 255, 0.04);
+  --bg-subtle-2: rgba(255, 255, 255, 0.06);
+  --red-accent: #ef4444;
+  --chrome-red: #ff5f57;
+  --chrome-yellow: #febc2e;
+  --chrome-green: #28c840;
 }
 
 @theme inline {
@@ -77,6 +137,19 @@
   box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.1s ease;
+}
+
+.no-transition,
+.no-transition *,
+.no-transition *::before,
+.no-transition *::after {
+  transition: none !important;
+}
+
 html,
 body {
   height: 100%;
@@ -85,14 +158,7 @@ body {
 }
 
 html {
-  color-scheme: dark;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    /* PRD: NO light mode. */
-    color-scheme: dark;
-  }
+  background: var(--bg-base);
 }
 
 body {
@@ -154,41 +220,66 @@ select {
   color: inherit;
 }
 
-/* Visible focus that matches PRD neon/glow language */
 :where(a, button, input, textarea, select, [role="button"], [tabindex]):focus-visible {
   outline: none;
-  box-shadow: 0 0 0 1px rgba(0, 255, 135, 0.55), 0 0 24px rgba(0, 255, 135, 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--green) 55%, transparent),
+    0 0 24px color-mix(in srgb, var(--green) 25%, transparent);
   border-radius: 10px;
 }
 
-/* Scrollbars (dark-only, subtle, PRD-faithful) */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) rgba(255, 255, 255, 0.04);
+  scrollbar-color: color-mix(in srgb, var(--txt) 14%, transparent)
+    color-mix(in srgb, var(--txt) 4%, transparent);
 }
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 *::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.035);
+  background: color-mix(in srgb, var(--txt) 3.5%, transparent);
 }
 *::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--txt) 12%, transparent);
+  border: 1px solid var(--border);
   border-radius: 999px;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--txt) 18%, transparent);
+  border-color: var(--border-md);
 }
 
 ::selection {
-  background: rgba(0, 255, 135, 0.18);
+  background: color-mix(in srgb, var(--green) 18%, transparent);
   color: var(--txt);
 }
 
-/* Subtle grid background helper */
+/* Top nav CTA */
+.nav-cta {
+  display: none;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--green);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--on-green);
+  box-shadow: var(--shadow-glow-g);
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+.nav-cta:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 0 26px var(--g-glow);
+}
+@media (min-width: 640px) {
+  .nav-cta {
+    display: inline-flex;
+  }
+}
+
 .gridiq-grid {
   position: relative;
   isolation: isolate;
@@ -206,16 +297,12 @@ select {
   z-index: -1;
 }
 
-/* Visual language helpers (PRD §2.3) */
-
-/* Glassmorphism nav surface */
 .gridiq-glass {
   background: var(--glass);
   border: 1px solid var(--border);
   backdrop-filter: blur(16px);
 }
 
-/* Card surfaces */
 .gridiq-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -227,7 +314,6 @@ select {
   border-radius: var(--radius-md);
 }
 
-/* Top accent line (2px) */
 .gridiq-top-accent {
   position: relative;
   overflow: hidden;
@@ -239,20 +325,19 @@ select {
   right: 0;
   top: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--neon-green), transparent);
+  background: linear-gradient(90deg, var(--green), transparent);
   opacity: 0.9;
 }
 .gridiq-top-accent[data-accent="orange"]::before {
-  background: linear-gradient(90deg, var(--neon-orange), transparent);
+  background: linear-gradient(90deg, var(--orange), transparent);
 }
 .gridiq-top-accent[data-accent="blue"]::before {
-  background: linear-gradient(90deg, var(--neon-blue), transparent);
+  background: linear-gradient(90deg, var(--blue), transparent);
 }
 .gridiq-top-accent[data-accent="purple"]::before {
-  background: linear-gradient(90deg, var(--neon-purple), transparent);
+  background: linear-gradient(90deg, var(--purple), transparent);
 }
 
-/* Accent glow helpers for active elements */
 .gridiq-glow-g {
   box-shadow: var(--shadow-glow-g);
 }
@@ -263,7 +348,6 @@ select {
   box-shadow: var(--shadow-glow-b);
 }
 
-/* Neon ring primitives (buttons/inputs) */
 .gridiq-ring {
   border: 1px solid var(--border);
   background: var(--bg-card);
@@ -278,31 +362,33 @@ select {
   outline: none;
 }
 .gridiq-ring[data-accent="green"]:focus-visible {
-  border-color: rgba(0, 255, 135, 0.28);
-  box-shadow: 0 0 0 1px rgba(0, 255, 135, 0.55), 0 0 24px rgba(0, 255, 135, 0.25);
+  border-color: color-mix(in srgb, var(--green) 28%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--green) 55%, transparent),
+    0 0 24px color-mix(in srgb, var(--green) 25%, transparent);
 }
 .gridiq-ring[data-accent="orange"]:focus-visible {
-  border-color: rgba(255, 107, 43, 0.28);
-  box-shadow: 0 0 0 1px rgba(255, 107, 43, 0.55), 0 0 24px rgba(255, 107, 43, 0.25);
+  border-color: color-mix(in srgb, var(--orange) 28%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--orange) 55%, transparent),
+    0 0 24px color-mix(in srgb, var(--orange) 25%, transparent);
 }
 .gridiq-ring[data-accent="blue"]:focus-visible {
-  border-color: rgba(59, 158, 255, 0.28);
-  box-shadow: 0 0 0 1px rgba(59, 158, 255, 0.55), 0 0 24px rgba(59, 158, 255, 0.2);
+  border-color: color-mix(in srgb, var(--blue) 28%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--blue) 55%, transparent),
+    0 0 24px color-mix(in srgb, var(--blue) 20%, transparent);
 }
 .gridiq-ring[data-accent="purple"]:focus-visible {
-  border-color: rgba(168, 85, 247, 0.28);
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.55), 0 0 24px rgba(168, 85, 247, 0.22);
+  border-color: color-mix(in srgb, var(--purple) 28%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--purple) 55%, transparent),
+    0 0 24px color-mix(in srgb, var(--purple) 22%, transparent);
 }
 
-/* Gradient headline text (PRD §4.1.B) */
 .gridiq-gradient-text {
-  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-orange));
+  background: linear-gradient(90deg, var(--green), var(--blue), var(--orange));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Glow orbs (PRD §4.1.B) */
 .gridiq-orb {
   position: absolute;
   width: 520px;
@@ -313,16 +399,27 @@ select {
   pointer-events: none;
 }
 .gridiq-orb[data-accent="green"] {
-  background: radial-gradient(circle at 30% 30%, rgba(0, 255, 135, 0.35), transparent 62%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--green) 35%, transparent),
+    transparent 62%
+  );
 }
 .gridiq-orb[data-accent="blue"] {
-  background: radial-gradient(circle at 30% 30%, rgba(59, 158, 255, 0.28), transparent 62%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--blue) 28%, transparent),
+    transparent 62%
+  );
 }
 .gridiq-orb[data-accent="orange"] {
-  background: radial-gradient(circle at 30% 30%, rgba(255, 107, 43, 0.28), transparent 62%);
+  background: radial-gradient(
+    circle at 30% 30%,
+    color-mix(in srgb, var(--orange) 28%, transparent),
+    transparent 62%
+  );
 }
 
-/* Hover lift + border brighten (PRD §4.1.D / §9.4) */
 .gridiq-hover-lift {
   transition: transform 200ms var(--ease-out), border-color 200ms var(--ease-out),
     background-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
@@ -333,30 +430,48 @@ select {
   background-color: var(--bg-hover);
 }
 
-/* Gradient stat boxes (PRD §4.1.E) */
 .gridiq-stat-box {
   border-radius: var(--radius-md);
   border: 0.5px solid var(--border-md);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--txt) 6%, transparent),
+    color-mix(in srgb, var(--txt) 1%, transparent)
+  );
 }
 .gridiq-stat-box[data-accent="green"] {
-  background: linear-gradient(135deg, rgba(0, 255, 135, 0.12), rgba(0, 255, 135, 0.03));
-  border-color: rgba(0, 255, 135, 0.2);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--green) 12%, transparent),
+    color-mix(in srgb, var(--green) 3%, transparent)
+  );
+  border-color: color-mix(in srgb, var(--green) 20%, transparent);
 }
 .gridiq-stat-box[data-accent="orange"] {
-  background: linear-gradient(135deg, rgba(255, 107, 43, 0.12), rgba(255, 107, 43, 0.03));
-  border-color: rgba(255, 107, 43, 0.2);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--orange) 12%, transparent),
+    color-mix(in srgb, var(--orange) 3%, transparent)
+  );
+  border-color: color-mix(in srgb, var(--orange) 20%, transparent);
 }
 .gridiq-stat-box[data-accent="blue"] {
-  background: linear-gradient(135deg, rgba(59, 158, 255, 0.12), rgba(59, 158, 255, 0.03));
-  border-color: rgba(59, 158, 255, 0.2);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--blue) 12%, transparent),
+    color-mix(in srgb, var(--blue) 3%, transparent)
+  );
+  border-color: color-mix(in srgb, var(--blue) 20%, transparent);
 }
 .gridiq-stat-box[data-accent="purple"] {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(168, 85, 247, 0.03));
-  border-color: rgba(168, 85, 247, 0.2);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--purple) 12%, transparent),
+    color-mix(in srgb, var(--purple) 3%, transparent)
+  );
+  border-color: color-mix(in srgb, var(--purple) 20%, transparent);
 }
 
-/* Type primitives (PRD §2.2) */
 .gridiq-label {
   font-size: 11px;
   font-weight: 700;
@@ -383,7 +498,6 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
-/* Subtle divider line that respects PRD borders */
 .gridiq-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border), transparent);

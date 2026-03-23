@@ -3,7 +3,7 @@ import { TEAM_COLORS } from "./team-colors";
 export type TeamInfo = { abbr: string; name: string; color: string };
 
 function t(abbr: string, name: string): TeamInfo {
-  return { abbr, name, color: TEAM_COLORS[abbr] ?? "#44445a" };
+  return { abbr, name, color: TEAM_COLORS[abbr] ?? "var(--txt-3)" };
 }
 
 export const NFL_DIVISIONS: { id: string; label: string; teams: TeamInfo[] }[] = [

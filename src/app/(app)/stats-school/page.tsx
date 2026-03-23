@@ -174,13 +174,13 @@ export default function StatsSchoolPage() {
     <div className="w-full">
       {/* Hero */}
       <header className="mx-auto max-w-6xl">
-        <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
+        <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--green)]">
           Stats School
         </div>
-        <h1 className="mt-3 text-[40px] font-black tracking-[-2px] bg-gradient-to-r from-[#00ff87] via-[#3b9eff] to-[#ff6b2b] bg-clip-text text-transparent sm:text-[64px]">
+        <h1 className="mt-3 text-[40px] font-black tracking-[-2px] bg-gradient-to-r from-[var(--green)] via-[var(--blue)] to-[var(--orange)] bg-clip-text text-transparent sm:text-[64px]">
           Advanced Stats, Plain English
         </h1>
-        <p className="mt-3 max-w-[720px] text-[15px] leading-relaxed text-[#8888a0]">
+        <p className="mt-3 max-w-[720px] text-[15px] leading-relaxed text-[var(--txt-2)]">
           No jargon. No math degree required. Just football.
         </p>
       </header>
@@ -195,7 +195,7 @@ export default function StatsSchoolPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search stats by name…"
-              className="w-full rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] px-4 py-3 text-[14px] text-[#f2f2f5] outline-none focus:border-[rgba(0,255,135,0.28)] focus:shadow-[0_0_0_1px_rgba(0,255,135,0.55),0_0_24px_rgba(0,255,135,0.25)]"
+              className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-4 py-3 text-[14px] text-[var(--txt)] outline-none focus:border-[color-mix(in_srgb,var(--green)_28%,transparent)] focus:shadow-[0_0_0_1px_color-mix(in_srgb,var(--green)_55%,transparent),0_0_24px_color-mix(in_srgb,var(--green)_25%,transparent)]"
             />
           </div>
 
@@ -208,8 +208,8 @@ export default function StatsSchoolPage() {
                   onClick={() => setCategory(c)}
                   className={`rounded-full border px-4 py-2 text-[12px] font-bold uppercase tracking-[0.6px] transition ${
                     active
-                      ? "border-[rgba(255,107,43,0.35)] bg-[rgba(255,107,43,0.12)] text-[#ff6b2b]"
-                      : "border-[rgba(255,255,255,0.06)] bg-[#0d0d10] text-[#8888a0] hover:border-[rgba(255,255,255,0.10)]"
+                      ? "border-[color-mix(in_srgb,var(--orange)_35%,transparent)] bg-[var(--orange-light)] text-[var(--orange)]"
+                      : "border-[var(--border)] bg-[var(--bg-card)] text-[var(--txt-2)] hover:border-[var(--border-md)]"
                   }`}
                 >
                   {c}
@@ -231,13 +231,13 @@ export default function StatsSchoolPage() {
 
       {/* Bottom CTA */}
       <section className="mx-auto mt-10 max-w-6xl px-0">
-        <div className="relative overflow-hidden rounded-[14px] border border-[rgba(0,255,135,0.2)] bg-[#050507] px-6 py-8 sm:px-10">
+        <div className="relative overflow-hidden rounded-[14px] border border-[var(--green-border)] bg-[var(--bg-base)] px-6 py-8 sm:px-10">
           <div
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[70px]"
             style={{
               background:
-                "radial-gradient(circle at 30% 30%, rgba(0,255,135,0.22), transparent 62%)",
+                "radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--green) 22%, transparent), transparent 62%)",
               opacity: 0.75,
             }}
           />
@@ -247,17 +247,17 @@ export default function StatsSchoolPage() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, rgba(0,255,135,0.08), rgba(59,158,255,0.06), rgba(255,107,43,0.06))",
+                "linear-gradient(135deg, color-mix(in srgb, var(--green) 8%, transparent), color-mix(in srgb, var(--blue) 6%, transparent), color-mix(in srgb, var(--orange) 6%, transparent))",
             }}
           />
 
           <div className="relative z-10 flex flex-col items-center text-center">
-            <h2 className="text-[24px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[28px]">
+            <h2 className="text-[24px] font-extrabold tracking-[-1px] text-[var(--txt)] sm:text-[28px]">
               Ready to see these stats in action?
             </h2>
             <a
               href="/search"
-              className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#00ff87] px-6 text-[13px] font-semibold text-[#050507] shadow-[0_0_24px_rgba(0,255,135,0.25)] transition hover:brightness-110 hover:shadow-[0_0_28px_rgba(0,255,135,0.35)]"
+              className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[var(--green)] px-6 text-[13px] font-semibold text-[var(--on-green)] shadow-[var(--shadow-glow-g)] transition hover:brightness-110 hover:shadow-[var(--shadow-glow-g)]"
             >
               Search Any Player
             </a>

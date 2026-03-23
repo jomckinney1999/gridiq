@@ -321,7 +321,7 @@ export default function StatGridPage() {
 
   if (loadError) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center text-[#ff6b2b]">
+      <div className="mx-auto max-w-lg px-4 py-16 text-center text-[var(--orange)]">
         {loadError}
       </div>
     );
@@ -331,10 +331,10 @@ export default function StatGridPage() {
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-10 w-64 rounded bg-[rgba(255,255,255,0.06)]" />
+          <div className="h-10 w-64 rounded bg-[var(--bg-subtle-2)]" />
           <div className="grid grid-cols-4 gap-2">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => (
-              <div key={i} className="h-28 rounded-xl bg-[rgba(255,255,255,0.04)]" />
+              <div key={i} className="h-28 rounded-xl bg-[var(--bg-subtle)]" />
             ))}
           </div>
         </div>
@@ -351,12 +351,12 @@ export default function StatGridPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-      <header className="flex flex-col gap-3 border-b border-[rgba(255,255,255,0.06)] pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <header className="flex flex-col gap-3 border-b border-[var(--border)] pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-[22px] font-extrabold tracking-[-0.5px] text-[#f2f2f5]">
+          <h1 className="text-[22px] font-extrabold tracking-[-0.5px] text-[var(--txt)]">
             ⚡ Stat Grid
           </h1>
-          <p className="text-[12px] text-[#8888a0]">{dateLabel}</p>
+          <p className="text-[12px] text-[var(--txt-2)]">{dateLabel}</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-1 text-[18px]" aria-label={`${lives} lives`}>
@@ -367,33 +367,33 @@ export default function StatGridPage() {
             ))}
           </div>
           <div
-            className="rounded-lg border border-[rgba(0,255,135,0.25)] bg-[rgba(0,255,135,0.08)] px-3 py-1.5 font-mono text-[18px] font-bold tabular-nums text-[#00ff87]"
+            className="rounded-lg border border-[var(--green-border)] bg-[var(--green-light)] px-3 py-1.5 font-mono text-[18px] font-bold tabular-nums text-[var(--green)]"
             suppressHydrationWarning
           >
             {formatTimer(remaining)}
           </div>
-          <div className="text-[12px] text-[#8888a0]">
-            Streak: <span className="font-semibold text-[#f2f2f5]">{streak}</span>
+          <div className="text-[12px] text-[var(--txt-2)]">
+            Streak: <span className="font-semibold text-[var(--txt)]">{streak}</span>
           </div>
         </div>
       </header>
 
-      <div className="mt-4 rounded-xl border border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.06)] px-4 py-3 text-[13px] leading-relaxed text-[#b8b8c8]">
+      <div className="mt-4 rounded-xl border border-[var(--green-border)] bg-[var(--green-light)] px-4 py-3 text-[13px] leading-relaxed text-[var(--txt-2)]">
         Guess the player behind each stat line. Same puzzle for everyone today. Wrong answers cost a
         life. You have four free hints per cell (position, team, initial, year).
       </div>
 
-      <p className="mt-3 text-[13px] text-[#8888a0]">
+      <p className="mt-3 text-[13px] text-[var(--txt-2)]">
         Progress:{" "}
-        <span className="font-semibold text-[#f2f2f5]">
+        <span className="font-semibold text-[var(--txt)]">
           {solved.length} / 12 solved
         </span>{" "}
-        · <span className="font-semibold text-[#f2f2f5]">{guessCount}</span> guesses
+        · <span className="font-semibold text-[var(--txt)]">{guessCount}</span> guesses
       </p>
 
       {showResults ? (
-        <div className="mt-8 space-y-6 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#0d0d10] p-6">
-          <h2 className="text-[18px] font-bold text-[#f2f2f5]">
+        <div className="mt-8 space-y-6 rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-6">
+          <h2 className="text-[18px] font-bold text-[var(--txt)]">
             {gaveUp
               ? "Puzzle ended"
               : solved.length >= 12
@@ -402,17 +402,17 @@ export default function StatGridPage() {
                   ? "Out of lives"
                   : "Time's up!"}
           </h2>
-          <p className="text-[14px] text-[#8888a0]">
+          <p className="text-[14px] text-[var(--txt-2)]">
             You solved {solved.length}/12. Streak: {streak} days.
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
             {cellsByIndex.map((c, i) => (
               <div
                 key={c.position}
-                className="rounded-lg border border-[rgba(255,255,255,0.06)] bg-[#111116] p-2 text-[11px]"
+                className="rounded-lg border border-[var(--border)] bg-[var(--bg-card2)] p-2 text-[11px]"
               >
-                <div className="text-[#44445a]">{c.stat_label}</div>
-                <div className="font-semibold text-[#f2f2f5]">{c.answer}</div>
+                <div className="text-[var(--txt-3)]">{c.stat_label}</div>
+                <div className="font-semibold text-[var(--txt)]">{c.answer}</div>
               </div>
             ))}
           </div>
@@ -420,7 +420,7 @@ export default function StatGridPage() {
             <button
               type="button"
               onClick={handleShare}
-              className="rounded-full bg-[#00ff87] px-5 py-2 text-[13px] font-semibold text-[#050507] transition hover:brightness-110"
+              className="rounded-full bg-[var(--green)] px-5 py-2 text-[13px] font-semibold text-[var(--on-green)] transition hover:brightness-110"
             >
               Share
             </button>
@@ -430,11 +430,11 @@ export default function StatGridPage() {
         <>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end">
             <div className="min-w-0 flex-1">
-              <label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#44445a]">
+              <label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--txt-3)]">
                 Player name
               </label>
               <div
-                className={`mt-1 flex gap-2 rounded-xl border border-[rgba(255,255,255,0.1)] bg-[#0d0d10] px-3 py-2 ${
+                className={`mt-1 flex gap-2 rounded-xl border border-[var(--border-md)] bg-[var(--bg-card)] px-3 py-2 ${
                   shakeInput ? "animate-[stat-grid-shake_0.45s_ease-in-out]" : ""
                 }`}
               >
@@ -448,14 +448,14 @@ export default function StatGridPage() {
                   placeholder={
                     selectedCell === null ? "Select a cell first" : "Last name or full name"
                   }
-                  className="min-w-0 flex-1 border-0 bg-transparent text-[14px] text-[#f2f2f5] outline-none placeholder:text-[#44445a]"
+                  className="min-w-0 flex-1 border-0 bg-transparent text-[14px] text-[var(--txt)] outline-none placeholder:text-[var(--txt-3)]"
                   disabled={completed}
                 />
                 <button
                   type="button"
                   onClick={submitGuess}
                   disabled={completed}
-                  className="shrink-0 rounded-lg bg-[#00ff87] px-4 py-2 text-[13px] font-bold text-[#050507] transition hover:brightness-110 disabled:opacity-50"
+                  className="shrink-0 rounded-lg bg-[var(--green)] px-4 py-2 text-[13px] font-bold text-[var(--on-green)] transition hover:brightness-110 disabled:opacity-50"
                 >
                   Submit
                 </button>
@@ -464,7 +464,7 @@ export default function StatGridPage() {
           </div>
 
           <div className="mt-3">
-            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#44445a]">
+            <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--txt-3)]">
               Hints (selected cell)
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -497,14 +497,14 @@ export default function StatGridPage() {
                       onClick={() => revealHint(key)}
                       className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold transition ${
                         active
-                          ? "border-[rgba(0,255,135,0.45)] bg-[rgba(0,255,135,0.12)] text-[#00ff87]"
-                          : "border-[rgba(255,255,255,0.1)] bg-[#111116] text-[#8888a0] hover:border-[rgba(255,255,255,0.2)]"
+                          ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
+                          : "border-[var(--border-md)] bg-[var(--bg-card2)] text-[var(--txt-2)] hover:border-[var(--border-md)]"
                       }`}
                     >
                       {label}
                     </button>
                     {text ? (
-                      <span className="max-w-[140px] text-[10px] text-[#b8b8c8]">{text}</span>
+                      <span className="max-w-[140px] text-[10px] text-[var(--txt-2)]">{text}</span>
                     ) : null}
                   </div>
                 );
@@ -531,14 +531,14 @@ export default function StatGridPage() {
 
           {wrongGuesses.length > 0 ? (
             <div className="mt-6">
-              <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#44445a]">
+              <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--txt-3)]">
                 Wrong guesses
               </div>
               <div className="mt-2 flex flex-wrap gap-2">
                 {wrongGuesses.map((w) => (
                   <span
                     key={w}
-                    className="rounded-full border border-[rgba(255,107,43,0.35)] bg-[rgba(255,107,43,0.1)] px-2.5 py-1 text-[11px] text-[#ff6b2b]"
+                    className="rounded-full border border-[color-mix(in_srgb,var(--orange)_35%,transparent)] bg-[color-mix(in_srgb,var(--orange)_10%,transparent)] px-2.5 py-1 text-[11px] text-[var(--orange)]"
                   >
                     {w}
                   </span>
@@ -551,14 +551,14 @@ export default function StatGridPage() {
             <button
               type="button"
               onClick={handleGiveUp}
-              className="rounded-full border border-[rgba(255,255,255,0.12)] px-5 py-2 text-[13px] font-semibold text-[#8888a0] transition hover:bg-[rgba(255,255,255,0.04)]"
+              className="rounded-full border border-[var(--border-md)] px-5 py-2 text-[13px] font-semibold text-[var(--txt-2)] transition hover:bg-[color-mix(in_srgb,var(--txt)_4%,transparent)]"
             >
               Give Up
             </button>
             <button
               type="button"
               onClick={handleShare}
-              className="rounded-full border border-[rgba(0,255,135,0.25)] px-5 py-2 text-[13px] font-semibold text-[#00ff87] transition hover:bg-[rgba(0,255,135,0.08)]"
+              className="rounded-full border border-[var(--green-border)] px-5 py-2 text-[13px] font-semibold text-[var(--green)] transition hover:bg-[var(--green-light)]"
             >
               Share
             </button>

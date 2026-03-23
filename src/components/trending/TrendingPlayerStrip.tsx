@@ -14,7 +14,7 @@ export function TrendingPlayerStrip({ players }: TrendingPlayerStripProps) {
 
   return (
     <div className="min-w-0">
-      <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#44445a]">
+      <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)]">
         Trending players (guru_scores)
       </div>
       <div className="mt-2 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -25,14 +25,14 @@ export function TrendingPlayerStrip({ players }: TrendingPlayerStripProps) {
               <Link
                 href={`/search?q=${encodeURIComponent(p.name)}`}
                 className={cn(
-                  "inline-flex shrink-0 items-center gap-2 rounded-full border border-[rgba(255,255,255,0.08)] bg-[#111116] px-3 py-2 text-[12px] font-semibold text-[#f2f2f5] transition hover:border-[rgba(0,255,135,0.35)]",
+                  "inline-flex shrink-0 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-card2)] px-3 py-2 text-[12px] font-semibold text-[var(--txt)] transition hover:border-[var(--green-border)]",
                 )}
               >
                 <span className="whitespace-nowrap">{p.name}</span>
                 <span
                   className={cn(
                     "tabular-nums",
-                    up ? "text-[#00ff87]" : "text-[#ff6b2b]",
+                    up ? "text-[var(--green)]" : "text-[var(--orange)]",
                   )}
                 >
                   {up ? "↑" : "↓"}

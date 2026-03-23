@@ -217,7 +217,11 @@ export default function TierListMakerPage() {
     try {
       const { default: html2canvas } = await import("html2canvas");
       const canvas = await html2canvas(captureRef.current, {
-        backgroundColor: "#050507",
+        backgroundColor:
+          typeof window !== "undefined"
+            ? getComputedStyle(document.documentElement).getPropertyValue("--bg-base").trim() ||
+              undefined
+            : undefined,
         scale: 2,
         logging: false,
       });
@@ -242,13 +246,13 @@ export default function TierListMakerPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-      <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#00ff87]">
+      <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--green)]">
         NFL Tier Lists
       </div>
-      <h1 className="text-[22px] font-extrabold tracking-[-0.5px] text-[#f2f2f5]">
+      <h1 className="text-[22px] font-extrabold tracking-[-0.5px] text-[var(--txt)]">
         Tier list maker
       </h1>
-      <p className="mt-1 text-[13px] text-[#8888a0]">
+      <p className="mt-1 text-[13px] text-[var(--txt-2)]">
         Drag players into tiers. Publish to get a shareable link.
       </p>
 
@@ -268,20 +272,20 @@ export default function TierListMakerPage() {
       </div>
 
       {banner ? (
-        <p className="mt-4 rounded-lg border border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.06)] px-3 py-2 text-[12px] text-[#b8f5d6]">
+        <p className="mt-4 rounded-lg border border-[var(--green-border)] bg-[var(--green-light)] px-3 py-2 text-[12px] text-[var(--green)]">
           {banner}
         </p>
       ) : null}
 
       <div ref={captureRef} className="mt-8 space-y-3">
-        <div className="border-b border-[rgba(255,255,255,0.06)] pb-3">
-          <h2 className="text-[16px] font-bold text-[#f2f2f5]">{title}</h2>
-          <p className="text-[11px] text-[#55556a]">{positionFilter} · NFL Stat Guru</p>
+        <div className="border-b border-[var(--border)] pb-3">
+          <h2 className="text-[16px] font-bold text-[var(--txt)]">{title}</h2>
+          <p className="text-[11px] text-[var(--txt-muted)]">{positionFilter} · NFL Stat Guru</p>
         </div>
         {loading ? (
           <div className="space-y-2">
             {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-[88px] animate-pulse rounded-xl bg-[rgba(255,255,255,0.04)]" />
+              <div key={i} className="h-[88px] animate-pulse rounded-xl bg-[var(--bg-subtle)]" />
             ))}
           </div>
         ) : (
@@ -309,7 +313,7 @@ export default function TierListMakerPage() {
       </div>
 
       <div className="mt-8">
-        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#44445a]">
+        <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--txt-3)]">
           Unranked pool
         </div>
         <input
@@ -317,14 +321,14 @@ export default function TierListMakerPage() {
           value={poolSearch}
           onChange={(e) => setPoolSearch(e.target.value)}
           placeholder="Search players…"
-          className="mb-3 w-full rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#0d0d10] px-3 py-2 text-[13px] text-[#f2f2f5] outline-none placeholder:text-[#44445a]"
+          className="mb-3 w-full rounded-xl border border-[var(--border)] bg-[var(--bg-card)] px-3 py-2 text-[13px] text-[var(--txt)] outline-none placeholder:text-[var(--txt-3)]"
         />
         <div
           className={cn(
             "min-h-[120px] rounded-xl border border-dashed p-3 transition-all duration-200",
             hoverTarget === "pool"
-              ? "border-[#00ff87] bg-[rgba(0,255,135,0.06)]"
-              : "border-[rgba(255,255,255,0.1)] bg-[#0a0a0c]",
+              ? "border-[var(--green)] bg-[var(--green-light)]"
+              : "border-[var(--border-md)] bg-[var(--bg-secondary)]",
             dropFlash === "pool" && "animate-[tierlist-drop_0.35s_ease-out]",
           )}
           onDragOver={handleDragOver("pool")}
@@ -344,7 +348,7 @@ export default function TierListMakerPage() {
             ))}
           </div>
           {!loading && poolPlayers.length === 0 ? (
-            <p className="py-6 text-center text-[12px] text-[#55556a]">No players in pool.</p>
+            <p className="py-6 text-center text-[12px] text-[var(--txt-muted)]">No players in pool.</p>
           ) : null}
         </div>
       </div>

@@ -57,40 +57,40 @@ const featuredPlayers: FeaturedPlayer[] = [
   },
 ];
 
-function accentColor(accent: Accent) {
+function accentVar(accent: Accent) {
   switch (accent) {
     case "green":
-      return "#00ff87";
+      return "var(--green)";
     case "orange":
-      return "#ff6b2b";
+      return "var(--orange)";
     case "blue":
-      return "#3b9eff";
+      return "var(--blue)";
     case "purple":
-      return "#a855f7";
+      return "var(--purple)";
   }
 }
 
 export function FeaturedPlayers() {
   return (
-    <section className="bg-[#050507] py-16 sm:py-20">
+    <section className="bg-[var(--bg-base)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
+          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--green)]">
             This Week
           </div>
-          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[32px]">
+          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[var(--txt)] sm:text-[32px]">
             Featured Players
           </h2>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {featuredPlayers.map((p) => {
-            const c = accentColor(p.accent);
+            const c = accentVar(p.accent);
             return (
               <Link
                 key={p.id}
                 href={`/player/${p.id}`}
-                className="group relative block h-[260px] overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] transition duration-200 ease-out"
+                className="group relative block h-[260px] overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--bg-card)] transition duration-200 ease-out"
               >
                 {/* Hover: accent border */}
                 <div
@@ -107,18 +107,21 @@ export function FeaturedPlayers() {
 
                 {/* Team color dot */}
                 <div
-                  className="absolute left-3 top-3 z-20 h-2.5 w-2.5 rounded-full ring-2 ring-[rgba(0,0,0,0.45)]"
+                  className="absolute left-3 top-3 z-20 h-2.5 w-2.5 rounded-full ring-2 ring-[color-mix(in_srgb,var(--txt)_45%,transparent)]"
                   style={{ backgroundColor: p.teamBg }}
                 />
 
                 {/* Grade badge */}
                 <div
-                  className="absolute right-3 top-3 z-20 rounded-full border px-2.5 py-1 text-[11px] font-bold"
-                  style={{
-                    color: c,
-                    backgroundColor: `${c}1a`,
-                    borderColor: `${c}33`,
-                  }}
+                  className={`absolute right-3 top-3 z-20 rounded-full border px-2.5 py-1 text-[11px] font-bold ${
+                    p.accent === "green"
+                      ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
+                      : p.accent === "orange"
+                        ? "border-[color-mix(in_srgb,var(--orange)_25%,transparent)] bg-[var(--orange-light)] text-[var(--orange)]"
+                        : p.accent === "blue"
+                          ? "border-[color-mix(in_srgb,var(--blue)_25%,transparent)] bg-[var(--blue-light)] text-[var(--blue)]"
+                          : "border-[color-mix(in_srgb,var(--purple)_25%,transparent)] bg-[var(--purple-light)] text-[var(--purple)]"
+                  }`}
                 >
                   {p.grade}
                 </div>
@@ -143,11 +146,11 @@ export function FeaturedPlayers() {
                 <div className="relative h-[45%]">
                   <div
                     aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-[#0d0d10] via-[#0d0d10]/80 to-transparent"
+                    className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-[color-mix(in_srgb,var(--bg-card)_80%,transparent)] to-transparent"
                   />
                   <div className="absolute inset-x-0 bottom-0 z-10 p-4">
-                    <div className="text-[16px] font-bold text-[#f2f2f5]">{p.name}</div>
-                    <div className="mt-1 text-[12px] text-[#8888a0]">
+                    <div className="text-[16px] font-bold text-[var(--txt)]">{p.name}</div>
+                    <div className="mt-1 text-[12px] text-[var(--txt-2)]">
                       {p.pos} · {p.team}
                     </div>
                   </div>

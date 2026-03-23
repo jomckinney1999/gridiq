@@ -37,6 +37,7 @@ const features = [
   },
 ] as const;
 
+/** Embedded motif SVGs use data URIs; those cannot resolve `var(--*)` from the page. */
 function accentColor(accent: (typeof features)[number]["accent"]) {
   switch (accent) {
     case "green":
@@ -205,16 +206,16 @@ function motifSvg(
 
 export function FeatureGrid() {
   return (
-    <section className="bg-[#050507] py-16 sm:py-20">
+    <section className="bg-[var(--bg-base)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
+          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--green)]">
             Why NFL Stat Guru
           </div>
-          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[32px]">
+          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[var(--txt)] sm:text-[32px]">
             Everything other sites won’t show you
           </h2>
-          <p className="mt-3 text-[13px] leading-relaxed text-[#8888a0]">
+          <p className="mt-3 text-[13px] leading-relaxed text-[var(--txt-2)]">
             Premium, dark-first analytics with neon clarity — built for the
             questions that matter.
           </p>
@@ -226,7 +227,7 @@ export function FeatureGrid() {
             return (
               <div
                 key={f.title}
-                className="group relative overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] p-5 transition duration-200 ease-out hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.10)] hover:bg-[#1c1c21]"
+                className="group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-5 transition duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--border-md)] hover:bg-[var(--bg-hover)]"
               >
                 {/* Full-bleed background "image" + cinematic readability overlays */}
                 <div
@@ -245,7 +246,7 @@ export function FeatureGrid() {
                   className="pointer-events-none absolute inset-0"
                   style={{
                     background:
-                      "linear-gradient(180deg, rgba(13,13,16,0.25) 0%, rgba(13,13,16,0.82) 55%, rgba(13,13,16,0.98) 100%)",
+                      "linear-gradient(180deg, color-mix(in srgb, var(--bg-card) 25%, transparent) 0%, color-mix(in srgb, var(--bg-card) 82%, transparent) 55%, color-mix(in srgb, var(--bg-card) 98%, transparent) 100%)",
                   }}
                 />
                 <div
@@ -276,10 +277,10 @@ export function FeatureGrid() {
                   />
                 </div>
 
-                <div className="relative z-10 mt-4 text-[14px] font-bold text-[#f2f2f5]">
+                <div className="relative z-10 mt-4 text-[14px] font-bold text-[var(--txt)]">
                   {f.title}
                 </div>
-                <div className="relative z-10 mt-2 text-[12px] leading-relaxed text-[#8888a0]">
+                <div className="relative z-10 mt-2 text-[12px] leading-relaxed text-[var(--txt-2)]">
                   {f.desc}
                 </div>
               </div>

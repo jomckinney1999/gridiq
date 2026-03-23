@@ -5,24 +5,24 @@ import type { KeyStat, StatAccent } from "@/types/gridiq-query";
 
 const ACCENT: Record<StatAccent, { line: string; text: string; glow: string }> = {
   green: {
-    line: "from-[#00ff87]",
-    text: "text-[#00ff87]",
-    glow: "rgba(0,255,135,0.25)",
+    line: "from-[var(--green)]",
+    text: "text-[var(--green)]",
+    glow: "color-mix(in srgb, var(--green) 25%, transparent)",
   },
   orange: {
-    line: "from-[#ff6b2b]",
-    text: "text-[#ff6b2b]",
-    glow: "rgba(255,107,43,0.25)",
+    line: "from-[var(--orange)]",
+    text: "text-[var(--orange)]",
+    glow: "color-mix(in srgb, var(--orange) 25%, transparent)",
   },
   blue: {
-    line: "from-[#3b9eff]",
-    text: "text-[#3b9eff]",
-    glow: "rgba(59,158,255,0.22)",
+    line: "from-[var(--blue)]",
+    text: "text-[var(--blue)]",
+    glow: "color-mix(in srgb, var(--blue) 22%, transparent)",
   },
   purple: {
-    line: "from-[#a855f7]",
-    text: "text-[#a855f7]",
-    glow: "rgba(168,85,247,0.22)",
+    line: "from-[var(--purple)]",
+    text: "text-[var(--purple)]",
+    glow: "color-mix(in srgb, var(--purple) 22%, transparent)",
   },
 };
 
@@ -40,13 +40,13 @@ export function StatCardGrid({ stats }: { stats: KeyStat[] }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[#0d0d10] p-[14px]"
+            className="relative overflow-hidden rounded-xl border-[0.5px] border-[var(--border)] bg-[var(--bg-card)] p-[14px]"
           >
             <div
               aria-hidden
               className={`absolute left-0 right-0 top-0 h-0.5 bg-gradient-to-r ${c.line} to-transparent`}
             />
-            <div className="text-[10px] font-bold uppercase tracking-[0.5px] text-[#44445a]">
+            <div className="text-[10px] font-bold uppercase tracking-[0.5px] text-[var(--txt-3)]">
               {s.label}
             </div>
             <div
@@ -56,10 +56,10 @@ export function StatCardGrid({ stats }: { stats: KeyStat[] }) {
               {s.value}
             </div>
             {s.sub ? (
-              <div className="mt-1 text-[11px] leading-snug text-[#66667a]">{s.sub}</div>
+              <div className="mt-1 text-[11px] leading-snug text-[var(--txt-muted)]">{s.sub}</div>
             ) : null}
             {s.rank ? (
-              <span className="mt-2 inline-block rounded-full border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.04)] px-2 py-0.5 text-[10px] font-bold text-[#8888a0]">
+              <span className="mt-2 inline-block rounded-full border border-[var(--border)] bg-[var(--bg-subtle)] px-2 py-0.5 text-[10px] font-bold text-[var(--txt-2)]">
                 {s.rank}
               </span>
             ) : null}

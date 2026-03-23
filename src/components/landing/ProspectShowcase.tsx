@@ -47,39 +47,34 @@ const boxes: Box[] = [
   },
 ];
 
-function color(accent: Box["accent"]) {
-  switch (accent) {
-    case "green":
-      return "#00ff87";
-    case "orange":
-      return "#ff6b2b";
-    case "blue":
-      return "#3b9eff";
-  }
-}
+const ACCENT_VAR: Record<Box["accent"], string> = {
+  green: "var(--green)",
+  orange: "var(--orange)",
+  blue: "var(--blue)",
+};
 
 function StatBox({ b }: { b: Box }) {
-  const c = color(b.accent);
+  const v = ACCENT_VAR[b.accent];
   return (
     <div
       className="rounded-[14px] border p-4"
       style={{
-        background: `linear-gradient(135deg, ${c}1f, ${c}08)`,
-        borderColor: `${c}33`,
+        background: `linear-gradient(135deg, color-mix(in srgb, ${v} 12%, transparent), color-mix(in srgb, ${v} 5%, transparent))`,
+        borderColor: `color-mix(in srgb, ${v} 20%, transparent)`,
       }}
     >
-      <div className="text-[10px] font-semibold uppercase tracking-[0.6px] text-[#44445a]">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.6px] text-[var(--txt-3)]">
         {b.label}
       </div>
-      <div className="mt-2 text-[22px] font-extrabold tracking-[-1px]" style={{ color: c }}>
+      <div className="mt-2 text-[22px] font-extrabold tracking-[-1px]" style={{ color: v }}>
         {b.value}
       </div>
-      <div className="mt-1 flex items-center justify-between text-[11px] text-[#8888a0]">
+      <div className="mt-1 flex items-center justify-between text-[11px] text-[var(--txt-2)]">
         <span>{b.pctText}</span>
-        <span className="text-[#44445a]">Percentile</span>
+        <span className="text-[var(--txt-3)]">Percentile</span>
       </div>
-      <div className="mt-3 h-[3px] overflow-hidden rounded-full bg-[rgba(255,255,255,0.06)]">
-        <div className="h-full rounded-full" style={{ width: `${b.pct}%`, background: c }} />
+      <div className="mt-3 h-[3px] overflow-hidden rounded-full bg-[var(--bg-subtle-2)]">
+        <div className="h-full rounded-full" style={{ width: `${b.pct}%`, background: v }} />
       </div>
     </div>
   );
@@ -87,23 +82,23 @@ function StatBox({ b }: { b: Box }) {
 
 export function ProspectShowcase() {
   return (
-    <section className="bg-[#050507] py-16 sm:py-20">
+    <section className="bg-[var(--bg-base)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <div className="max-w-2xl">
-          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#00ff87]">
+          <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--green)]">
             Prospect Showcase
           </div>
-          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[#f2f2f5] sm:text-[32px]">
+          <h2 className="mt-3 text-balance text-[28px] font-extrabold tracking-[-1px] text-[var(--txt)] sm:text-[32px]">
             PFF-style depth, built into your workflow
           </h2>
-          <p className="mt-3 text-[13px] leading-relaxed text-[#8888a0]">
+          <p className="mt-3 text-[13px] leading-relaxed text-[var(--txt-2)]">
             Grades, projections, scouting summary, and percentile metrics — all in a single, premium card.
           </p>
         </div>
 
-        <div className="mt-10 overflow-hidden rounded-[14px] border border-[rgba(255,255,255,0.10)] bg-[#0d0d10]">
+        <div className="mt-10 overflow-hidden rounded-[14px] border border-[var(--border-md)] bg-[var(--bg-card)]">
           {/* Header */}
-          <div className="relative flex flex-col gap-6 overflow-hidden border-b border-[rgba(255,255,255,0.06)] bg-[rgba(0,255,135,0.05)] p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative flex flex-col gap-6 overflow-hidden border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--green)_5%,transparent)] p-6 sm:flex-row sm:items-center sm:justify-between">
             {/* Cinematic right-side background image */}
             <div
               aria-hidden
@@ -121,19 +116,19 @@ export function ProspectShowcase() {
               <div
                 className="absolute inset-0"
                 style={{
-                  background: "linear-gradient(to left, transparent 0%, #0d0d10 55%)",
+                  background: "linear-gradient(to left, transparent 0%, var(--bg-card) 55%)",
                 }}
               />
             </div>
 
             <div className="min-w-0">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.6px] text-[#44445a]">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.6px] text-[var(--txt-3)]">
                 Fernando Mendoza
               </div>
-              <div className="mt-2 text-[22px] font-extrabold tracking-[-1px] text-[#f2f2f5]">
+              <div className="mt-2 text-[22px] font-extrabold tracking-[-1px] text-[var(--txt)]">
                 QB #15 · Indiana Hoosiers
               </div>
-              <div className="mt-1 text-[13px] text-[#8888a0]">
+              <div className="mt-1 text-[13px] text-[var(--txt-2)]">
                 RS Jr. · 6'3&quot; / 210lbs
               </div>
             </div>
@@ -141,17 +136,19 @@ export function ProspectShowcase() {
             <div className="flex items-end gap-4 sm:justify-end">
               <div className="text-right">
                 <div
-                  className="text-[48px] font-black tracking-[-2px] text-[#00ff87]"
-                  style={{ textShadow: "0 0 30px rgba(0,255,135,0.4)" }}
+                  className="text-[48px] font-black tracking-[-2px] text-[var(--green)]"
+                  style={{
+                    textShadow: "0 0 30px color-mix(in srgb, var(--green) 40%, transparent)",
+                  }}
                 >
                   91.6
                 </div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.6px] text-[#44445a]">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.6px] text-[var(--txt-3)]">
                   Overall Grade
                 </div>
               </div>
               <div className="pb-2">
-                <div className="inline-flex items-center rounded-full border border-[rgba(255,107,43,0.25)] bg-[rgba(255,107,43,0.10)] px-3 py-1 text-[11px] font-semibold text-[#ff6b2b]">
+                <div className="inline-flex items-center rounded-full border border-[color-mix(in_srgb,var(--orange)_25%,transparent)] bg-[color-mix(in_srgb,var(--orange)_10%,transparent)] px-3 py-1 text-[11px] font-semibold text-[var(--orange)]">
                   Round 2 · Pick 42–58
                 </div>
               </div>
@@ -159,13 +156,13 @@ export function ProspectShowcase() {
           </div>
 
           {/* Tabs */}
-          <div className="flex flex-wrap gap-6 border-b border-[rgba(255,255,255,0.06)] px-6">
+          <div className="flex flex-wrap gap-6 border-b border-[var(--border)] px-6">
             {["Career Stats", "Comparables", "Grades by Game", "Analysis"].map((t, i) => (
               <div
                 key={t}
                 className={[
-                  "py-4 text-[12px] font-semibold text-[#8888a0]",
-                  i === 0 ? "border-b-2 border-[#00ff87] text-[#f2f2f5]" : "",
+                  "py-4 text-[12px] font-semibold text-[var(--txt-2)]",
+                  i === 0 ? "border-b-2 border-[var(--green)] text-[var(--txt)]" : "",
                 ].join(" ")}
               >
                 {t}
@@ -174,9 +171,9 @@ export function ProspectShowcase() {
           </div>
 
           {/* 3-column grid */}
-          <div className="grid grid-cols-1 divide-y divide-[rgba(255,255,255,0.06)] md:grid-cols-3 md:divide-x md:divide-y-0">
+          <div className="grid grid-cols-1 divide-y divide-[var(--border)] md:grid-cols-3 md:divide-x md:divide-y-0">
             <div className="p-6">
-              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#f2f2f5]">
+              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--txt)]">
                 2025 Season
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-[12px]">
@@ -192,16 +189,16 @@ export function ProspectShowcase() {
                   ["RTG", "129.4", "green"],
                 ].map(([k, v, a]) => (
                   <div key={k} className="flex items-center justify-between gap-3">
-                    <span className="text-[#8888a0]">{k}</span>
+                    <span className="text-[var(--txt-2)]">{k}</span>
                     <span
                       className="font-semibold"
                       style={{
                         color:
                           a === "green"
-                            ? "#00ff87"
+                            ? "var(--green)"
                             : a === "orange"
-                              ? "#ff6b2b"
-                              : "#f2f2f5",
+                              ? "var(--orange)"
+                              : "var(--txt)",
                       }}
                     >
                       {v}
@@ -212,7 +209,7 @@ export function ProspectShowcase() {
             </div>
 
             <div className="p-6">
-              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#f2f2f5]">
+              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--txt)]">
                 2024 Season
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 text-[12px]">
@@ -228,10 +225,12 @@ export function ProspectShowcase() {
                   ["RTG", "98.1"],
                 ].map(([k, v, a]) => (
                   <div key={k} className="flex items-center justify-between gap-3">
-                    <span className="text-[#8888a0]">{k}</span>
+                    <span className="text-[var(--txt-2)]">{k}</span>
                     <span
                       className="font-semibold"
-                      style={{ color: a === "orange" ? "#ff6b2b" : "#f2f2f5" }}
+                      style={{
+                        color: a === "orange" ? "var(--orange)" : "var(--txt)",
+                      }}
                     >
                       {v}
                     </span>
@@ -241,7 +240,7 @@ export function ProspectShowcase() {
             </div>
 
             <div className="p-6">
-              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[#f2f2f5]">
+              <div className="text-[12px] font-bold uppercase tracking-[0.6px] text-[var(--txt)]">
                 Scout Summary
               </div>
               <div className="mt-4 grid grid-cols-1 gap-2 text-[12px]">
@@ -255,16 +254,16 @@ export function ProspectShowcase() {
                   ["Projection", "Day 2", "orange"],
                 ].map(([k, v, a]) => (
                   <div key={k} className="flex items-center justify-between gap-3">
-                    <span className="text-[#8888a0]">{k}</span>
+                    <span className="text-[var(--txt-2)]">{k}</span>
                     <span
                       className="font-semibold"
                       style={{
                         color:
                           a === "green"
-                            ? "#00ff87"
+                            ? "var(--green)"
                             : a === "orange"
-                              ? "#ff6b2b"
-                              : "#f2f2f5",
+                              ? "var(--orange)"
+                              : "var(--txt)",
                       }}
                     >
                       {v}
@@ -276,7 +275,7 @@ export function ProspectShowcase() {
           </div>
 
           {/* Bottom stat boxes */}
-          <div className="border-t border-[rgba(255,255,255,0.06)] p-6">
+          <div className="border-t border-[var(--border)] p-6">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {boxes.map((b) => (
                 <StatBox key={b.label} b={b} />

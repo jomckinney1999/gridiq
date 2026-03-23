@@ -22,8 +22,15 @@ export function Logo({ size = 32 }: { size?: number }) {
         <circle cx="16" cy="40" r="1.5" fill="#3b9eff" opacity="0.4"/>
         <circle cx="56" cy="40" r="1.5" fill="#00ff87" opacity="0.4"/>
       </svg>
-      <span style={{ fontSize: '17px', fontWeight: 700, letterSpacing: '-0.5px', color: '#f2f2f5' }}>
-        NFL Stat <span style={{ color: '#00ff87' }}>Guru</span>
+      <span
+        style={{
+          fontSize: "17px",
+          fontWeight: 700,
+          letterSpacing: "-0.5px",
+          color: "var(--txt)",
+        }}
+      >
+        NFL Stat <span style={{ color: "var(--green)" }}>Guru</span>
       </span>
     </div>
   )

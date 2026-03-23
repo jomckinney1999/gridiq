@@ -5,12 +5,12 @@ import type { TrendingFeedItem } from "@/types/trending";
 import { cn } from "@/lib/utils";
 
 const SOURCE_ACCENT: Record<string, string> = {
-  ESPN: "#dc2626",
-  Twitter: "#3b9eff",
-  Reddit: "#ff6b2b",
-  Beat: "#a855f7",
-  NFL: "#00ff87",
-  PFF: "#c4a35a",
+  ESPN: "var(--red-accent)",
+  Twitter: "var(--blue)",
+  Reddit: "var(--orange)",
+  Beat: "var(--purple)",
+  NFL: "var(--green)",
+  PFF: "var(--txt-2)",
 };
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -27,13 +27,13 @@ type NewsCardProps = {
 };
 
 export function NewsCard({ item }: NewsCardProps) {
-  const accent = SOURCE_ACCENT[item.source] ?? "#8888a0";
+  const accent = SOURCE_ACCENT[item.source] ?? "var(--txt-2)";
 
   return (
     <article
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d10]",
-        "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[rgba(255,255,255,0.12)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.35)]",
+        "group relative overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-card)]",
+        "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-[var(--border-md)] hover:shadow-[var(--shadow-md)]",
       )}
     >
       <div
@@ -46,20 +46,20 @@ export function NewsCard({ item }: NewsCardProps) {
       <div className="p-4 pt-5">
         <div className="flex flex-wrap items-center gap-2">
           <span
-            className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#050507]"
+            className="rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--txt)]"
             style={{ backgroundColor: accent }}
           >
             {SOURCE_LABEL[item.source] ?? item.source}
           </span>
-          <span className="text-[11px] text-[#8888a0]">
-            <span className="font-medium text-[#b8b8c8]">{item.author}</span>
-            <span className="text-[#55556a]"> · </span>
+          <span className="text-[11px] text-[var(--txt-2)]">
+            <span className="font-medium text-[var(--txt-2)]">{item.author}</span>
+            <span className="text-[var(--txt-muted)]"> · </span>
             {item.timeAgo}
           </span>
         </div>
 
-        <h3 className="mt-2 text-[13px] font-semibold leading-snug text-[#f2f2f5]">{item.headline}</h3>
-        <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-[#8888a0]">{item.body}</p>
+        <h3 className="mt-2 text-[13px] font-semibold leading-snug text-[var(--txt)]">{item.headline}</h3>
+        <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-[var(--txt-2)]">{item.body}</p>
 
         {item.playerTags.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-1.5">
@@ -67,7 +67,7 @@ export function NewsCard({ item }: NewsCardProps) {
               <Link
                 key={name}
                 href={`/search?q=${encodeURIComponent(name)}`}
-                className="rounded-full border border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.06)] px-2 py-0.5 text-[10px] font-semibold text-[#00ff87] transition hover:border-[rgba(0,255,135,0.4)] hover:bg-[rgba(0,255,135,0.1)]"
+                className="rounded-full border border-[var(--green-border)] bg-[var(--green-light)] px-2 py-0.5 text-[10px] font-semibold text-[var(--green)] transition hover:border-[color-mix(in_srgb,var(--green)_40%,transparent)] hover:bg-[var(--green-light)]"
               >
                 {name}
               </Link>
@@ -75,7 +75,7 @@ export function NewsCard({ item }: NewsCardProps) {
           </div>
         ) : null}
 
-        <div className="mt-3 flex flex-wrap gap-3 text-[10px] font-medium text-[#55556a]">
+        <div className="mt-3 flex flex-wrap gap-3 text-[10px] font-medium text-[var(--txt-muted)]">
           <span>{item.engagement.likes.toLocaleString()} likes</span>
           <span>{item.engagement.reposts.toLocaleString()} reposts</span>
           <span>{item.engagement.views.toLocaleString()} views</span>
@@ -87,11 +87,11 @@ export function NewsCard({ item }: NewsCardProps) {
 
 export function NewsCardSkeleton() {
   return (
-    <div className="animate-pulse overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] p-4">
-      <div className="h-2 w-24 rounded bg-[rgba(255,255,255,0.06)]" />
-      <div className="mt-3 h-3 w-full rounded bg-[rgba(255,255,255,0.04)]" />
-      <div className="mt-2 h-3 w-[92%] rounded bg-[rgba(255,255,255,0.04)]" />
-      <div className="mt-3 h-3 w-2/3 rounded bg-[rgba(255,255,255,0.04)]" />
+    <div className="animate-pulse overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4">
+      <div className="h-2 w-24 rounded bg-[var(--bg-subtle-2)]" />
+      <div className="mt-3 h-3 w-full rounded bg-[var(--bg-subtle)]" />
+      <div className="mt-2 h-3 w-[92%] rounded bg-[var(--bg-subtle)]" />
+      <div className="mt-3 h-3 w-2/3 rounded bg-[var(--bg-subtle)]" />
     </div>
   );
 }

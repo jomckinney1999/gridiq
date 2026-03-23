@@ -1,14 +1,14 @@
 const PALETTE = [
-  "#1e3a5f",
-  "#c41e3a",
-  "#0b4f26",
-  "#6b21a8",
-  "#b45309",
-  "#0e7490",
-  "#9f1239",
-  "#1d4ed8",
-  "#854d0e",
-  "#14532d",
+  "var(--blue)",
+  "var(--orange)",
+  "var(--green)",
+  "var(--purple)",
+  "color-mix(in srgb, var(--blue) 75%, var(--txt) 25%)",
+  "color-mix(in srgb, var(--orange) 75%, var(--txt) 25%)",
+  "color-mix(in srgb, var(--green) 75%, var(--txt) 25%)",
+  "color-mix(in srgb, var(--purple) 75%, var(--txt) 25%)",
+  "color-mix(in srgb, var(--blue) 50%, var(--purple) 50%)",
+  "color-mix(in srgb, var(--orange) 50%, var(--green) 50%)",
 ];
 
 export function teamChipBackground(team: string): string {

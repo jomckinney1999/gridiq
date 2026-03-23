@@ -25,41 +25,41 @@ const EXAMPLE_CARDS = [
   {
     q: "Routes run — single game",
     example: "How many routes did Waddle run in week 7 of 2023?",
-    border: "border-l-[#00ff87]",
+    border: "border-l-[var(--green)]",
   },
   {
     q: "Turnovers — playoff splits",
     example: "Jayden Daniels fumbles in the 2024 playoffs",
-    border: "border-l-[#ff6b2b]",
+    border: "border-l-[var(--orange)]",
   },
   {
     q: "Advanced WR profile",
     example: "CeeDee Lamb advanced stats 2024",
-    border: "border-l-[#3b9eff]",
+    border: "border-l-[var(--blue)]",
   },
 ] as const;
 
 function SearchResultsSkeleton() {
   return (
     <div className="animate-pulse space-y-6 px-4 py-6 sm:px-6">
-      <div className="space-y-2 rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)] p-4">
-        <div className="h-3 w-40 rounded bg-[rgba(255,255,255,0.06)]" />
-        <div className="h-3 w-full rounded bg-[rgba(255,255,255,0.04)]" />
-        <div className="h-3 w-[92%] rounded bg-[rgba(255,255,255,0.04)]" />
-        <div className="h-3 w-[80%] rounded bg-[rgba(255,255,255,0.04)]" />
+      <div className="space-y-2 rounded-xl border-[0.5px] border-[var(--border)] bg-[var(--bg-subtle)] p-4">
+        <div className="h-3 w-40 rounded bg-[var(--bg-subtle-2)]" />
+        <div className="h-3 w-full rounded bg-[var(--bg-subtle)]" />
+        <div className="h-3 w-[92%] rounded bg-[var(--bg-subtle)]" />
+        <div className="h-3 w-[80%] rounded bg-[var(--bg-subtle)]" />
       </div>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {[0, 1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-28 rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)]"
+            className="h-28 rounded-xl border-[0.5px] border-[var(--border)] bg-[var(--bg-subtle)]"
           />
         ))}
       </div>
-      <div className="overflow-hidden rounded-xl border-[0.5px] border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.04)]">
-        <div className="h-10 bg-[rgba(255,255,255,0.03)]" />
+      <div className="overflow-hidden rounded-xl border-[0.5px] border-[var(--border)] bg-[var(--bg-subtle)]">
+        <div className="h-10 bg-[color-mix(in_srgb,var(--txt)_4%,transparent)]" />
         {[0, 1, 2].map((i) => (
-          <div key={i} className="h-12 border-t border-[rgba(255,255,255,0.04)]" />
+          <div key={i} className="h-12 border-t border-[var(--border)]" />
         ))}
       </div>
     </div>
@@ -170,7 +170,7 @@ function SearchPageInner() {
         isLoading={isLoading}
       />
 
-      <div className="border-b border-[rgba(255,255,255,0.06)] px-4 py-3 sm:px-6">
+      <div className="border-b border-[var(--border)] px-4 py-3 sm:px-6">
         <div className="flex flex-wrap gap-2">
           {QUICK_PILLS.map((pill) => (
             <button
@@ -180,7 +180,7 @@ function SearchPageInner() {
                 setQuery(pill);
                 void runQuery(pill);
               }}
-              className="rounded-full border border-[rgba(255,255,255,0.08)] bg-transparent px-3 py-1.5 text-left text-[12px] text-[#8888a0] transition hover:border-[rgba(0,255,135,0.35)] hover:bg-[rgba(0,255,135,0.06)] hover:text-[#00ff87]"
+              className="rounded-full border border-[var(--border)] bg-transparent px-3 py-1.5 text-left text-[12px] text-[var(--txt-2)] transition hover:border-[var(--green-border)] hover:bg-[var(--green-light)] hover:text-[var(--green)]"
             >
               {pill}
             </button>
@@ -189,13 +189,13 @@ function SearchPageInner() {
       </div>
 
       {limitNote ? (
-        <div className="border-b border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.06)] px-4 py-2 text-center text-[12px] text-[#8888a0] sm:px-6">
+        <div className="border-b border-[var(--green-border)] bg-[var(--green-light)] px-4 py-2 text-center text-[12px] text-[var(--txt-2)] sm:px-6">
           {limitNote}
         </div>
       ) : null}
 
       {error ? (
-        <div className="border-b border-[rgba(255,107,43,0.25)] bg-[rgba(255,107,43,0.08)] px-4 py-3 text-[13px] text-[#ff6b2b] sm:px-6">
+        <div className="border-b border-[color-mix(in_srgb,var(--orange)_25%,transparent)] bg-[var(--orange-light)] px-4 py-3 text-[13px] text-[var(--orange)] sm:px-6">
           {error}
         </div>
       ) : null}
@@ -203,11 +203,11 @@ function SearchPageInner() {
       <div className="min-h-0 flex-1 overflow-y-auto">
         {showEmpty ? (
           <div className="mx-auto flex max-w-3xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-[rgba(0,255,135,0.1)] text-[32px] text-[#00ff87]">
+            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-[var(--green-light)] text-[32px] text-[var(--green)]">
               ✦
             </div>
-            <h2 className="mt-6 text-[24px] font-bold text-[#f2f2f5]">Ask the Guru anything</h2>
-            <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-[#8888a0]">
+            <h2 className="mt-6 text-[24px] font-bold text-[var(--txt)]">Ask the Guru anything</h2>
+            <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-[var(--txt-2)]">
               Try: routes run, fumbles, prospect profiles, advanced metrics, player comparisons
             </p>
             <div className="mt-10 grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-3">
@@ -216,10 +216,10 @@ function SearchPageInner() {
                   key={c.example}
                   type="button"
                   onClick={() => onFollowUp(c.example)}
-                  className={`rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d10] p-4 text-left transition hover:border-[rgba(0,255,135,0.25)] ${c.border} border-l-2`}
+                  className={`rounded-xl border border-[var(--border)] bg-[var(--bg-card)] p-4 text-left transition hover:border-[var(--green-border)] ${c.border} border-l-2`}
                 >
-                  <div className="text-[12px] font-bold uppercase tracking-wide text-[#44445a]">{c.q}</div>
-                  <div className="mt-2 text-[13px] leading-snug text-[#f2f2f5]">{c.example}</div>
+                  <div className="text-[12px] font-bold uppercase tracking-wide text-[var(--txt-3)]">{c.q}</div>
+                  <div className="mt-2 text-[13px] leading-snug text-[var(--txt)]">{c.example}</div>
                 </button>
               ))}
             </div>
@@ -232,14 +232,14 @@ function SearchPageInner() {
               <div key={turn.id}>
                 {idx > 0 ? (
                   <div
-                    className="mb-10 h-px w-full bg-[rgba(255,255,255,0.06)]"
+                    className="mb-10 h-px w-full bg-[var(--bg-subtle-2)]"
                     aria-hidden
                   />
                 ) : null}
-                <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[#44445a]">
+                <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.08em] text-[var(--txt-3)]">
                   You asked
                 </div>
-                <p className="mb-4 text-[14px] text-[#f2f2f5]">{turn.query}</p>
+                <p className="mb-4 text-[14px] text-[var(--txt)]">{turn.query}</p>
 
                 <div className="space-y-6">
                   <AIResponseCard response={turn.response} />
@@ -272,8 +272,8 @@ export default function SearchPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[50vh] flex-col">
-          <div className="border-b border-[rgba(255,255,255,0.06)] bg-[rgba(5,5,7,0.95)] px-6 py-4">
-            <div className="h-12 animate-pulse rounded-xl bg-[rgba(255,255,255,0.04)]" />
+          <div className="border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--bg-base)_95%,transparent)] px-6 py-4">
+            <div className="h-12 animate-pulse rounded-xl bg-[var(--bg-subtle)]" />
           </div>
           <SearchResultsSkeleton />
         </div>

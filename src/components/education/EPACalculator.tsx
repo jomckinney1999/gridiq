@@ -104,9 +104,9 @@ const PLAYS: PlayDef[] = [
 ];
 
 const segActive =
-  "border-[rgba(0,255,135,0.3)] bg-[rgba(0,255,135,0.12)] text-[#00ff87]";
+  "border-[color-mix(in_srgb,var(--green)_30%,transparent)] bg-[var(--green-light)] text-[var(--green)]";
 const segIdle =
-  "border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.02)] text-[#8888a0] hover:border-[rgba(255,255,255,0.12)]";
+  "border-[var(--border)] bg-[color-mix(in_srgb,var(--txt)_4%,transparent)] text-[var(--txt-2)] hover:border-[var(--border-md)]";
 
 function fieldLabels(): { pct: number; text: string }[] {
   return [
@@ -315,7 +315,7 @@ export function EPACalculator() {
 
   return (
     <div
-      className="mx-auto mt-8 max-w-6xl rounded-[14px] border border-[rgba(255,255,255,0.12)] bg-[#0d0d10] p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.4)] sm:p-7"
+      className="mx-auto mt-8 max-w-6xl rounded-[14px] border border-[var(--border-md)] bg-[var(--bg-card)] p-5 shadow-[var(--shadow-sm)] sm:p-7"
       aria-label="Expected Points calculator"
     >
       <style>{`
@@ -325,12 +325,12 @@ export function EPACalculator() {
           width: 100%;
           height: 6px;
           border-radius: 9999px;
-          background: rgba(255,255,255,0.08);
+          background: var(--bg-subtle-2);
           outline: none;
           transition: box-shadow 0.25s ease;
         }
         .epa-calc-range:focus-visible {
-          box-shadow: 0 0 0 2px rgba(0,255,135,0.35);
+          box-shadow: 0 0 0 2px var(--green-border);
         }
         .epa-calc-range::-webkit-slider-thumb {
           -webkit-appearance: none;
@@ -338,9 +338,9 @@ export function EPACalculator() {
           width: 18px;
           height: 18px;
           border-radius: 9999px;
-          background: #00ff87;
-          border: 2px solid rgba(0,255,135,0.5);
-          box-shadow: 0 0 14px rgba(0,255,135,0.65), 0 0 28px rgba(0,255,135,0.25);
+          background: var(--green);
+          border: 2px solid color-mix(in srgb, var(--green) 50%, transparent);
+          box-shadow: 0 0 14px var(--g-glow), 0 0 28px color-mix(in srgb, var(--green) 25%, transparent);
           cursor: pointer;
           transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -351,29 +351,29 @@ export function EPACalculator() {
           width: 18px;
           height: 18px;
           border-radius: 9999px;
-          background: #00ff87;
-          border: 2px solid rgba(0,255,135,0.5);
-          box-shadow: 0 0 14px rgba(0,255,135,0.65);
+          background: var(--green);
+          border: 2px solid color-mix(in srgb, var(--green) 50%, transparent);
+          box-shadow: 0 0 14px var(--g-glow);
           cursor: pointer;
         }
         .epa-calc-range::-moz-range-track {
           height: 6px;
           border-radius: 9999px;
-          background: rgba(255,255,255,0.08);
+          background: var(--bg-subtle-2);
         }
       `}</style>
 
       {/* Header */}
       <div
-        className="-mx-5 -mt-5 mb-6 rounded-t-[14px] border-b border-[rgba(255,255,255,0.06)] px-5 pb-5 pt-5 sm:-mx-7 sm:-mt-7 sm:px-7 sm:pt-7"
+        className="-mx-5 -mt-5 mb-6 rounded-t-[14px] border-b border-[var(--border)] px-5 pb-5 pt-5 sm:-mx-7 sm:-mt-7 sm:px-7 sm:pt-7"
         style={{
-          background: "linear-gradient(180deg, rgba(0,255,135,0.06) 0%, transparent 100%)",
+          background: "linear-gradient(180deg, var(--green-light) 0%, transparent 100%)",
         }}
       >
-        <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#00ff87]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--green)]">
           Interactive Calculator
         </div>
-        <h2 className="mt-2 text-[20px] font-extrabold tracking-[-0.5px] text-[#f2f2f5]">
+        <h2 className="mt-2 text-[20px] font-extrabold tracking-[-0.5px] text-[var(--txt)]">
           Expected Points (EP) Calculator
         </h2>
       </div>
@@ -382,7 +382,7 @@ export function EPACalculator() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10">
         <div className="flex flex-col gap-6 transition-opacity duration-300">
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#44445a]">
+            <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--txt-3)]">
               Down
             </div>
             <div className="mt-2 grid grid-cols-4 gap-2">
@@ -402,7 +402,7 @@ export function EPACalculator() {
           </div>
 
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#44445a]">
+            <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--txt-3)]">
               Distance to go
             </div>
             <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -423,10 +423,10 @@ export function EPACalculator() {
 
           <div>
             <div className="flex items-center justify-between gap-3">
-              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#44445a]">
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--txt-3)]">
                 Field position
               </span>
-              <span className="tabular-nums text-[13px] font-semibold text-[#00ff87] transition-all duration-300">
+              <span className="tabular-nums text-[13px] font-semibold text-[var(--green)] transition-all duration-300">
                 Yardline {yardline}
               </span>
             </div>
@@ -439,29 +439,29 @@ export function EPACalculator() {
               className="epa-calc-range mt-3"
               aria-label="Field position yard line"
             />
-            <div className="relative mt-3 overflow-hidden rounded-lg border border-[rgba(255,255,255,0.08)] bg-[#08080a]">
+            <div className="relative mt-3 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--bg-card2)]">
               <div className="relative flex h-12 w-full">
                 <div
-                  className="h-full w-[8%] shrink-0 bg-[#ff6b2b]"
+                  className="h-full w-[8%] shrink-0 bg-[var(--orange)]"
                   style={{ opacity: 0.85 }}
                   aria-hidden
                 />
-                <div className="h-full flex-1 bg-[#12121a]" aria-hidden />
+                <div className="h-full flex-1 bg-[var(--bg-card)]" aria-hidden />
                 <div
-                  className="h-full w-[8%] shrink-0 bg-[#00ff87]"
+                  className="h-full w-[8%] shrink-0 bg-[var(--green)]"
                   style={{ opacity: 0.35 }}
                   aria-hidden
                 />
               </div>
               <div
-                className="pointer-events-none absolute bottom-0 top-0 w-0.5 bg-[#00ff87] shadow-[0_0_12px_rgba(0,255,135,0.9)] transition-[left] duration-300 ease-out"
+                className="pointer-events-none absolute bottom-0 top-0 w-0.5 bg-[var(--green)] shadow-[var(--shadow-glow-g)] transition-[left] duration-300 ease-out"
                 style={{
                   left: `calc(${8 + (markerLeftPct(yardline) / 100) * 84}%)`,
                   transform: "translateX(-50%)",
                 }}
               />
             </div>
-            <div className="relative mt-2 h-4 text-[10px] font-semibold text-[#66667a]">
+            <div className="relative mt-2 h-4 text-[10px] font-semibold text-[var(--txt-muted)]">
               {fieldLabels().map(({ pct, text }) => (
                 <span
                   key={text}
@@ -477,30 +477,30 @@ export function EPACalculator() {
 
         <div className="flex flex-col gap-4">
           <div
-            className="flex flex-col items-center justify-center rounded-xl border border-[rgba(0,255,135,0.2)] bg-[rgba(0,255,135,0.06)] px-6 py-8 transition-all duration-300"
+            className="flex flex-col items-center justify-center rounded-xl border border-[var(--green-border)] bg-[var(--green-light)] px-6 py-8 transition-all duration-300"
           >
-            <div className="text-center text-[10px] font-bold uppercase tracking-[0.14em] text-[#00ff87]">
+            <div className="text-center text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--green)]">
               Expected Points
             </div>
             <div
-              className="mt-2 text-center text-[48px] font-black tabular-nums tracking-[-2px] text-[#00ff87] transition-all duration-300"
+              className="mt-2 text-center text-[48px] font-black tabular-nums tracking-[-2px] text-[var(--green)] transition-all duration-300"
               style={{
-                textShadow: "0 0 28px rgba(0,255,135,0.45), 0 0 60px rgba(0,255,135,0.2)",
+                textShadow: "0 0 28px var(--g-glow), 0 0 60px color-mix(in srgb, var(--green) 20%, transparent)",
               }}
             >
               {ep.toFixed(1)}
             </div>
-            <div className="mt-2 max-w-[260px] text-center text-[12px] leading-snug text-[#8888a0]">
+            <div className="mt-2 max-w-[260px] text-center text-[12px] leading-snug text-[var(--txt-2)]">
               points expected to score this drive
             </div>
           </div>
 
-          <div className="rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#08080a] p-4 text-[14px] leading-relaxed text-[#c8c8d4] transition-all duration-300">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-card2)] p-4 text-[14px] leading-relaxed text-[var(--txt-2)] transition-all duration-300">
             {contextText}
           </div>
 
-          <div className="rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] p-4 text-[14px] leading-relaxed text-[#f2f2f5] transition-all duration-300">
-            <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#44445a]">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] p-4 text-[14px] leading-relaxed text-[var(--txt)] transition-all duration-300">
+            <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[var(--txt-3)]">
               Situation
             </span>
             <p className="mt-2">{plainEnglish}</p>
@@ -509,8 +509,8 @@ export function EPACalculator() {
       </div>
 
       {/* Section 2 */}
-      <div className="mt-10 border-t border-[rgba(255,255,255,0.08)] pt-8">
-        <h3 className="text-[16px] font-extrabold tracking-[-0.3px] text-[#f2f2f5]">
+      <div className="mt-10 border-t border-[var(--border)] pt-8">
+        <h3 className="text-[16px] font-extrabold tracking-[-0.3px] text-[var(--txt)]">
           Play Simulator — What happens if…
         </h3>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -519,76 +519,76 @@ export function EPACalculator() {
             const toneRing =
               p.tone === "good"
                 ? sel
-                  ? "border-[rgba(0,255,135,0.45)] bg-[rgba(0,255,135,0.1)]"
+                  ? "border-[var(--green-border)] bg-[var(--green-light)]"
                   : ""
                 : p.tone === "bad"
                   ? sel
-                    ? "border-[rgba(255,107,43,0.5)] bg-[rgba(255,107,43,0.12)]"
+                    ? "border-[color-mix(in_srgb,var(--orange)_50%,transparent)] bg-[var(--orange-light)]"
                     : ""
                   : sel
-                    ? "border-[rgba(255,80,80,0.55)] bg-[rgba(255,80,80,0.1)]"
+                    ? "border-[color-mix(in_srgb,var(--red-accent)_55%,transparent)] bg-[color-mix(in_srgb,var(--red-accent)_10%,transparent)]"
                     : "";
             return (
               <button
                 key={p.id}
                 type="button"
                 onClick={() => setSelectedPlay(p.id)}
-                className={`group flex flex-col items-start gap-1 rounded-xl border border-[rgba(255,255,255,0.08)] bg-[#08080a] p-3 text-left transition-all duration-300 hover:border-[rgba(255,255,255,0.14)] ${toneRing}`}
+                className={`group flex flex-col items-start gap-1 rounded-xl border border-[var(--border)] bg-[var(--bg-card2)] p-3 text-left transition-all duration-300 hover:border-[var(--border-md)] ${toneRing}`}
               >
                 <span className="text-[22px] leading-none transition-transform duration-300 group-hover:scale-105">
                   {p.emoji}
                 </span>
-                <span className="text-[13px] font-bold text-[#f2f2f5]">{p.name}</span>
-                <span className="text-[11px] text-[#66667a]">{p.yardsNote}</span>
+                <span className="text-[13px] font-bold text-[var(--txt)]">{p.name}</span>
+                <span className="text-[11px] text-[var(--txt-muted)]">{p.yardsNote}</span>
               </button>
             );
           })}
         </div>
 
         {sim && (
-          <div className="mt-6 rounded-xl border border-[rgba(255,255,255,0.1)] bg-[#08080a] p-5 transition-all duration-500">
+          <div className="mt-6 rounded-xl border border-[var(--border-md)] bg-[var(--bg-card2)] p-5 transition-all duration-500">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
               <div
                 className={`text-[40px] font-black tabular-nums tracking-[-1px] transition-colors duration-300 ${
-                  sim.epa >= 0 ? "text-[#00ff87]" : "text-[#ff5a5a]"
+                  sim.epa >= 0 ? "text-[var(--green)]" : "text-[var(--red-accent)]"
                 }`}
                 style={
                   sim.epa >= 0
-                    ? { textShadow: "0 0 24px rgba(0,255,135,0.35)" }
-                    : { textShadow: "0 0 24px rgba(255,90,90,0.35)" }
+                    ? { textShadow: "0 0 24px var(--g-glow)" }
+                    : { textShadow: "0 0 24px color-mix(in srgb, var(--red-accent) 35%, transparent)" }
                 }
               >
                 {formatEPA(sim.epa)}
               </div>
               <div className="max-w-xl flex-1">
-                <div className="text-[16px] font-bold text-[#f2f2f5]">{sim.headline}</div>
-                <p className="mt-2 text-[14px] leading-relaxed text-[#8888a0]">{sim.explanation}</p>
+                <div className="text-[16px] font-bold text-[var(--txt)]">{sim.headline}</div>
+                <p className="mt-2 text-[14px] leading-relaxed text-[var(--txt-2)]">{sim.explanation}</p>
               </div>
             </div>
 
             <div className="mt-5 flex flex-wrap items-stretch gap-3">
-              <div className="min-w-[100px] flex-1 rounded-lg border border-[rgba(255,107,43,0.25)] bg-[rgba(255,107,43,0.08)] px-4 py-3 transition-all duration-300">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#ff6b2b]">
+              <div className="min-w-[100px] flex-1 rounded-lg border border-[color-mix(in_srgb,var(--orange)_25%,transparent)] bg-[var(--orange-light)] px-4 py-3 transition-all duration-300">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--orange)]">
                   Before
                 </div>
-                <div className="mt-1 text-[22px] font-black tabular-nums text-[#ff6b2b]">
+                <div className="mt-1 text-[22px] font-black tabular-nums text-[var(--orange)]">
                   {sim.epBefore.toFixed(1)}
                 </div>
               </div>
-              <div className="flex items-center text-[#44445a]">→</div>
-              <div className="min-w-[100px] flex-1 rounded-lg border border-[rgba(0,255,135,0.25)] bg-[rgba(0,255,135,0.08)] px-4 py-3 transition-all duration-300">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#00ff87]">
+              <div className="flex items-center text-[var(--txt-3)]">→</div>
+              <div className="min-w-[100px] flex-1 rounded-lg border border-[var(--green-border)] bg-[var(--green-light)] px-4 py-3 transition-all duration-300">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--green)]">
                   After
                 </div>
-                <div className="mt-1 text-[22px] font-black tabular-nums text-[#00ff87]">
+                <div className="mt-1 text-[22px] font-black tabular-nums text-[var(--green)]">
                   {sim.epAfter.toFixed(1)}
                 </div>
               </div>
               <div
                 className={`flex min-w-[120px] items-center justify-center rounded-full border px-4 py-2 text-[13px] font-extrabold tabular-nums transition-all duration-300 ${
                   sim.epa >= 0
-                    ? "border-[rgba(0,255,135,0.35)] bg-[rgba(0,255,135,0.15)] text-[#00ff87]"
-                    : "border-[rgba(255,90,90,0.4)] bg-[rgba(255,90,90,0.12)] text-[#ff5a5a]"
+                    ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
+                    : "border-[color-mix(in_srgb,var(--red-accent)_40%,transparent)] bg-[color-mix(in_srgb,var(--red-accent)_12%,transparent)] text-[var(--red-accent)]"
                 }`}
               >
                 EPA {formatEPA(sim.epa)}

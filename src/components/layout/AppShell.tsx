@@ -46,10 +46,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <AppShellContext.Provider value={value}>
-      <div className="flex h-dvh w-full flex-row overflow-hidden bg-[#050507]">
+      <div className="flex h-dvh w-full flex-row overflow-hidden bg-[var(--bg-base)]">
         <Suspense
           fallback={
-            <aside className="hidden w-16 shrink-0 border-r border-[rgba(255,255,255,0.06)] bg-[#0d0d10] md:block lg:w-[196px]" />
+            <aside className="hidden w-16 shrink-0 border-r border-[var(--border)] bg-[var(--bg-card)] md:block lg:w-[196px]" />
           }
         >
           <AppSidebar />
