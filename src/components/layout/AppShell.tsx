@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { AppSidebar } from "@/components/layout/AppSidebar";
+import { TopNav } from "@/components/landing/TopNav";
 
 type AppShellContextValue = {
   recentQueries: string[];
@@ -53,7 +54,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         >
           <AppSidebar />
         </Suspense>
-        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto">{children}</main>
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <TopNav alignWithSidebar />
+          <main className="min-h-0 flex-1 overflow-y-auto pt-[72px]">{children}</main>
+        </div>
       </div>
     </AppShellContext.Provider>
   );

@@ -5,6 +5,7 @@ import { Logo } from "@/components/ui/Logo";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useAppShell } from "@/components/layout/AppShell";
+import { PRIMARY_NAV, PRIMARY_NAV_SIDEBAR_ICONS, isActiveNav } from "@/config/nav";
 
 const DOT_COLORS = ["#00ff87", "#3b9eff", "#ff6b2b", "#a855f7", "#f2f2f5"];
 
@@ -28,16 +29,19 @@ function NavLink({
   label,
   icon,
   active,
+  onNavigate,
 }: {
   href: string;
   label: string;
   icon: string;
   active: boolean;
+  onNavigate?: () => void;
 }) {
   return (
     <Link
       href={href}
-      className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[12px] transition-colors md:justify-center lg:justify-start ${
+      onClick={onNavigate}
+      className={`flex items-center gap-2 rounded-lg px-2 py-2 text-[12px] font-semibold transition-colors md:justify-center lg:justify-start ${
         active
           ? "bg-[rgba(0,255,135,0.08)] text-[#00ff87]"
           : "text-[#b8b8c8] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#f2f2f5]"
@@ -77,6 +81,24 @@ export function AppSidebar() {
       </div>
 
       <div className="mt-2 flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-2 pb-4">
+        <div>
+          <div className="hidden px-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#44445a] lg:block">
+            Site
+          </div>
+          <nav className="mt-0 flex flex-col gap-0.5 lg:mt-2">
+            {PRIMARY_NAV.map((item, i) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                icon={PRIMARY_NAV_SIDEBAR_ICONS[i] ?? "·"}
+                active={isActiveNav(pathname, item.href)}
+                onNavigate={() => setMobileOpen(false)}
+              />
+            ))}
+          </nav>
+        </div>
+
         <div className="hidden lg:block">
           <div className="px-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#44445a]">
             Recent
@@ -117,6 +139,7 @@ export function AppSidebar() {
                 label={item.label}
                 icon={item.icon}
                 active={isActive(item.href)}
+                onNavigate={() => setMobileOpen(false)}
               />
             ))}
           </nav>
@@ -134,6 +157,7 @@ export function AppSidebar() {
                 label={item.label}
                 icon={item.icon}
                 active={isActive(item.href)}
+                onNavigate={() => setMobileOpen(false)}
               />
             ))}
           </nav>
@@ -164,7 +188,7 @@ export function AppSidebar() {
       <button
         type="button"
         aria-label="Open menu"
-        className="fixed left-3 top-3 z-[60] flex h-10 w-10 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.1)] bg-[#0d0d10] text-[#f2f2f5] shadow-lg md:hidden"
+        className="fixed left-3 top-[80px] z-[45] flex h-10 w-10 items-center justify-center rounded-lg border border-[rgba(255,255,255,0.1)] bg-[#0d0d10] text-[#f2f2f5] shadow-lg md:hidden"
         onClick={() => setMobileOpen(true)}
       >
         <span className="text-lg leading-none">☰</span>
@@ -184,7 +208,7 @@ export function AppSidebar() {
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div className="flex h-full min-h-0 flex-col px-2 pt-14 md:pt-3">{sidebarInner}</div>
+        <div className="flex h-full min-h-0 flex-col px-2 pt-[128px] md:pt-3">{sidebarInner}</div>
       </aside>
     </>
   );
