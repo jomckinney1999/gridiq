@@ -1,3 +1,4 @@
+import { safeStringArray, safeText } from "@/lib/safe-text";
 import type { TrendingFeedItem, TrendingSentiment } from "@/types/trending";
 
 export type NewsFeedApiRow = {
@@ -38,19 +39,21 @@ function sentimentFrom(s: string | null): TrendingSentiment {
 
 export function mapNewsFeedRow(row: NewsFeedApiRow): TrendingFeedItem {
   const isReddit = row.source_type === "Reddit";
-  const rawBody = (row.body ?? "").replace(/\s+/g, " ").trim();
+  const rawBody = safeText(row.body, "").replace(/\s+/g, " ").trim();
   const bodyPreview = rawBody.slice(0, 120) + (rawBody.length > 120 ? "…" : "");
 
+  const authorRaw = safeText(row.author, "").trim() || safeText(row.source_name, "News");
+
   return {
-    id: row.id,
-    source: row.source_type,
-    sourceName: row.source_name,
-    author: row.author?.trim() || row.source_name,
+    id: String(row.id),
+    source: safeText(row.source_type, "unknown"),
+    sourceName: safeText(row.source_name, "Source"),
+    author: authorRaw,
     authorHandle: "",
-    headline: row.headline,
+    headline: safeText(row.headline, "Untitled"),
     body: bodyPreview,
-    playerTags: row.player_tags ?? [],
-    url: row.url?.trim() || "#",
+    playerTags: safeStringArray(row.player_tags),
+    url: safeText(row.url, "").trim() || "#",
     timeAgo: timeAgo(row.published_at),
     sentiment: sentimentFrom(row.sentiment),
     isReddit,

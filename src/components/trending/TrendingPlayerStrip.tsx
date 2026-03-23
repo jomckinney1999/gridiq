@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { safeText } from "@/lib/safe-text";
 import type { TrendingPlayer } from "@/types/trending";
 import { cn } from "@/lib/utils";
 
@@ -19,16 +20,18 @@ export function TrendingPlayerStrip({ players }: TrendingPlayerStripProps) {
       </div>
       <div className="mt-2 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {players.map((p) => {
-          const up = p.changePct >= 0;
+          const name = safeText(p.name, "");
+          if (!name) return null;
+          const up = typeof p.changePct === "number" && p.changePct >= 0;
           return (
             <motion.div key={p.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
-                href={`/search?q=${encodeURIComponent(p.name)}`}
+                href={`/search?q=${encodeURIComponent(name)}`}
                 className={cn(
                   "inline-flex shrink-0 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-card2)] px-3 py-2 text-[12px] font-semibold text-[var(--txt)] transition hover:border-[var(--green-border)]",
                 )}
               >
-                <span className="whitespace-nowrap">{p.name}</span>
+                <span className="whitespace-nowrap">{name}</span>
                 <span
                   className={cn(
                     "tabular-nums",
@@ -36,7 +39,7 @@ export function TrendingPlayerStrip({ players }: TrendingPlayerStripProps) {
                   )}
                 >
                   {up ? "↑" : "↓"}
-                  {Math.abs(p.changePct).toFixed(1)}%
+                  {typeof p.changePct === "number" ? Math.abs(p.changePct).toFixed(1) : "—"}%
                 </span>
               </Link>
             </motion.div>

@@ -2,10 +2,11 @@
 
 import { motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { safeText } from "@/lib/safe-text";
 import { TEAM_COLORS } from "@/lib/trending/team-colors";
 import { mapNewsFeedRow, type NewsFeedApiRow } from "@/lib/trending/news-feed-map";
 import type { TrendingApiResponse, TrendingFeedItem } from "@/types/trending";
-import { NewsCard, NewsCardSkeleton } from "@/components/trending/NewsCard";
+import { NewsCard } from "@/components/trending/NewsCard";
 import { SourceFilters } from "@/components/trending/SourceFilters";
 import { TeamSidebar } from "@/components/trending/TeamSidebar";
 import { TrendingPlayerStrip } from "@/components/trending/TrendingPlayerStrip";
@@ -124,16 +125,11 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
       <div className="min-h-0 min-w-0 flex-1 overflow-y-auto">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
           {loading ? (
-            <div className="space-y-6">
-              <div className="animate-pulse space-y-3">
-                <div className="h-8 w-48 rounded bg-[var(--bg-subtle-2)]" />
-                <div className="h-4 w-72 rounded bg-[var(--bg-subtle)]" />
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                {[0, 1, 2, 3].map((i) => (
-                  <NewsCardSkeleton key={i} />
-                ))}
-              </div>
+            <div
+              className="text-center text-[var(--txt-2)]"
+              style={{ textAlign: "center", padding: "40px", color: "var(--txt-2)" }}
+            >
+              Loading latest NFL news...
             </div>
           ) : error ? (
             <div className="rounded-xl border border-[color-mix(in_srgb,var(--orange)_25%,transparent)] bg-[var(--orange-light)] px-4 py-3 text-[13px] text-[var(--orange)]">
@@ -150,8 +146,10 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                 style={{ backgroundColor: teamColor, opacity: 0.85 }}
               />
               <p className="max-w-md text-[15px] leading-relaxed text-[var(--txt-2)]">
-                {data.message ??
-                  `We're building out ${data.teamName} coverage. Check back soon.`}
+                {safeText(
+                  data.message,
+                  `We're building out ${safeText(data.teamName, "this team")} coverage. Check back soon.`,
+                )}
               </p>
             </motion.div>
           ) : data ? (
@@ -170,7 +168,7 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <h1 className="text-[20px] font-extrabold tracking-[-0.5px] text-[var(--txt)]">
-                        {data.teamName}
+                        {safeText(data.teamName, "NFL")}
                       </h1>
                       <span className="inline-flex items-center gap-2 rounded-full border border-[var(--green-border)] bg-[var(--green-light)] px-2.5 py-1 text-[11px] font-semibold text-[var(--green)]">
                         <span className="relative flex h-2 w-2">
@@ -181,9 +179,9 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                       </span>
                     </div>
                     <p className="mt-1 text-[13px] text-[var(--txt-2)]">
-                      {data.record} · {data.division}
+                      {safeText(data.record)} · {safeText(data.division)}
                     </p>
-                    <p className="mt-0.5 text-[12px] text-[var(--txt-muted)]">{data.coaching}</p>
+                    <p className="mt-0.5 text-[12px] text-[var(--txt-muted)]">{safeText(data.coaching)}</p>
                   </div>
                 </div>
               </header>
@@ -203,11 +201,28 @@ export function TrendingPageClient({ teamParam }: TrendingPageClientProps) {
                 <SourceFilters active={activeFilters} onToggle={toggleFilter} />
               </div>
 
-              {filteredFeed.length === 0 && !loading ? (
+              {feedItems.length === 0 && !feedError ? (
+                <div
+                  className="text-[var(--txt-2)]"
+                  style={{ textAlign: "center", padding: "40px", color: "var(--txt-2)" }}
+                >
+                  <div style={{ fontSize: "24px", marginBottom: "8px" }}>📡</div>
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      marginBottom: "4px",
+                      color: "var(--txt)",
+                    }}
+                  >
+                    Fetching latest news...
+                  </div>
+                  <div style={{ fontSize: "13px" }}>
+                    Run the news fetcher to populate stories, or check back in a few minutes.
+                  </div>
+                </div>
+              ) : filteredFeed.length === 0 ? (
                 <p className="py-10 text-center text-[14px] text-[var(--txt-2)]">
-                  {feedItems.length === 0
-                    ? "No stories yet. Run the news fetcher (scripts/news/fetch_news.py) or check back after the next sync."
-                    : "No stories match the selected filters. Try All Sources or adjust filters."}
+                  No stories match the selected filters. Try All Sources or adjust filters.
                 </p>
               ) : (
                 <div className="grid gap-8 lg:grid-cols-2">

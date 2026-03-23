@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { safeText } from "@/lib/safe-text";
 import type { TrendingFeedItem } from "@/types/trending";
 import { cn } from "@/lib/utils";
 
@@ -17,10 +18,11 @@ const SOURCE_BADGE: Record<string, { bg: string; fg: string; short: string }> = 
 };
 
 function badgeFor(item: TrendingFeedItem) {
-  return SOURCE_BADGE[item.source] ?? {
+  const src = safeText(item.source, "?");
+  return SOURCE_BADGE[src] ?? {
     bg: "var(--bg-subtle-2)",
     fg: "var(--txt)",
-    short: item.source,
+    short: src,
   };
 }
 
@@ -56,26 +58,29 @@ export function NewsCard({ item }: NewsCardProps) {
             {badge.short}
           </span>
           <span className="text-[11px] text-[var(--txt-2)]">
-            <span className="font-medium text-[var(--txt-2)]">{item.author}</span>
+            <span className="font-medium text-[var(--txt-2)]">{safeText(item.author, "—")}</span>
             <span className="text-[var(--txt-muted)]"> · </span>
-            {item.timeAgo}
+            {safeText(item.timeAgo, "—")}
           </span>
         </div>
 
         <h3 className="mt-2 text-[13px] font-semibold leading-snug text-[var(--txt)]">
           {href ? (
             <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--green)] hover:underline">
-              {item.headline}
+              {safeText(item.headline, "—")}
             </a>
           ) : (
-            item.headline
+            safeText(item.headline, "—")
           )}
         </h3>
-        <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-[var(--txt-2)]">{item.body}</p>
+        <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-[var(--txt-2)]">{safeText(item.body, "")}</p>
 
         {item.playerTags.length > 0 ? (
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {item.playerTags.map((name) => (
+            {item.playerTags.map((raw) => {
+              const name = safeText(raw, "");
+              if (!name) return null;
+              return (
               <Link
                 key={name}
                 href={`/search?q=${encodeURIComponent(name)}`}
@@ -83,17 +88,18 @@ export function NewsCard({ item }: NewsCardProps) {
               >
                 {name}
               </Link>
-            ))}
+            );
+            })}
           </div>
         ) : null}
 
         {isReddit ? (
           <div className="mt-3 flex flex-wrap gap-4 text-[11px] font-semibold text-[var(--txt-2)]">
             <span title="Upvotes">
-              ↑ {item.engagement.likes.toLocaleString()}
+              ↑ {Number(item.engagement?.likes ?? 0).toLocaleString()}
             </span>
             <span title="Comments">
-              💬 {item.engagement.reposts.toLocaleString()}
+              💬 {Number(item.engagement?.reposts ?? 0).toLocaleString()}
             </span>
           </div>
         ) : null}
@@ -110,7 +116,7 @@ export function NewsCard({ item }: NewsCardProps) {
         ) : null}
 
         <p className="mt-3 border-t border-[var(--border)] pt-3 text-[10px] leading-snug text-[var(--txt-3)]">
-          Via {item.sourceName}
+          Via {safeText(item.sourceName, "Source")}
           {item.isVerified ? (
             <span className="ml-1 rounded border border-[var(--border)] px-1 py-0.5 text-[9px] font-bold text-[var(--txt-muted)]">
               Verified source
