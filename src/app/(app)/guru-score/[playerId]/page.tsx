@@ -4,11 +4,13 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnalystRow } from "@/components/guru/AnalystRow";
+import { ConsensusRanking } from "@/components/guru/ConsensusRanking";
 import { FanSignals } from "@/components/guru/FanSignals";
 import { ScoreBreakdown } from "@/components/guru/ScoreBreakdown";
 import { StockChart, type StockHistoryPoint } from "@/components/guru/StockChart";
 import { getGuruSessionId } from "@/lib/guru/session";
 import { cn } from "@/lib/utils";
+import type { ConsensusRankingPayload } from "@/types/consensus";
 
 type DetailPayload = {
   score: {
@@ -71,6 +73,7 @@ export default function GuruScorePlayerPage() {
   const params = useParams();
   const playerId = params.playerId as string;
   const [data, setData] = useState<DetailPayload | null>(null);
+  const [consensus, setConsensus] = useState<ConsensusRankingPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [starsHover, setStarsHover] = useState(0);
   const [submitting, setSubmitting] = useState(false);
@@ -78,15 +81,26 @@ export default function GuruScorePlayerPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/guru-score/${playerId}`);
+      const [res, consRes] = await Promise.all([
+        fetch(`/api/guru-score/${playerId}`),
+        fetch(`/api/consensus-ranking/${playerId}`),
+      ]);
       const j = await res.json();
       if (!res.ok) {
         setData(null);
+        setConsensus(null);
         return;
       }
       setData(j as DetailPayload);
+      if (consRes.ok) {
+        const c = (await consRes.json()) as ConsensusRankingPayload;
+        setConsensus(c);
+      } else {
+        setConsensus(null);
+      }
     } catch {
       setData(null);
+      setConsensus(null);
     } finally {
       setLoading(false);
     }
@@ -216,6 +230,11 @@ export default function GuruScorePlayerPage() {
               <span className="rounded-full border border-[var(--border-md)] bg-[var(--bg-card2)] px-2.5 py-0.5 text-[12px] font-bold text-[var(--txt)]">
                 {p.position}
               </span>
+              {consensus?.avgRankDisplay != null ? (
+                <span className="rounded-full border border-[var(--border-md)] bg-[var(--bg-card2)] px-2.5 py-0.5 text-[12px] font-bold tabular-nums text-[var(--txt)]">
+                  {p.position} #{Math.round(consensus.avgRankDisplay)} avg
+                </span>
+              ) : null}
               <span className="text-[14px] font-semibold text-[var(--txt-2)]">{p.team}</span>
             </div>
           </div>
@@ -263,6 +282,16 @@ export default function GuruScorePlayerPage() {
           <StockChart history={data.history} />
         </div>
       </section>
+
+      {consensus ? (
+        <section className="mt-12">
+          <h2 className="text-[16px] font-bold text-[var(--txt)]">Consensus rankings</h2>
+          <p className="mt-1 text-[13px] text-[var(--txt-muted)]">Major outlets, fantasy ADP, and fan voting — averaged over the season.</p>
+          <div className="mt-4">
+            <ConsensusRanking {...consensus} />
+          </div>
+        </section>
+      ) : null}
 
       <section className="mt-12">
         <h2 className="text-[16px] font-bold text-[var(--txt)]">Analyst breakdown</h2>

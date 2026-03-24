@@ -6,7 +6,7 @@ Run: pip install feedparser requests supabase python-dotenv python-dateutil
 import os
 import re
 import email.utils
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
 
 import feedparser
@@ -118,35 +118,62 @@ def extract_players(text: str) -> list[str]:
 
 
 def extract_image(entry: Any) -> Optional[str]:
-    """Best-effort image URL from RSS entry (media, enclosures, or summary HTML)."""
-    media_list = getattr(entry, "media_content", None) or entry.get("media_content") or []
-    if media_list:
-        for media in media_list:
-            if not isinstance(media, dict):
-                continue
-            t = media.get("type") or ""
-            if t.startswith("image") or media.get("medium") == "image":
-                u = media.get("url")
-                if u:
-                    return u
-            u = media.get("url")
-            if u and (not t or t.startswith("image")):
-                return u
+    """Best-effort image URL from RSS entry (media_thumbnail, media, enclosures, HTML, ESPN CDN)."""
+    # Method 1: media_thumbnail (PFT uses this)
+    raw_thumbs = entry.get("media_thumbnail", []) or []
+    if not isinstance(raw_thumbs, list):
+        raw_thumbs = [raw_thumbs] if raw_thumbs else []
+    thumbnails = raw_thumbs
+    if thumbnails and isinstance(thumbnails[0], dict) and thumbnails[0].get("url"):
+        return thumbnails[0]["url"]
 
-    for enc in getattr(entry, "enclosures", None) or entry.get("enclosures", []) or []:
+    # Method 2: media_content
+    for m in entry.get("media_content", []) or []:
+        if not isinstance(m, dict):
+            continue
+        url = m.get("url", "") or ""
+        t = m.get("type", "") or ""
+        if url and (
+            "jpg" in url
+            or "jpeg" in url
+            or "png" in url
+            or "webp" in url
+            or "image" in t
+        ):
+            return url
+
+    # Method 3: enclosures
+    for enc in entry.get("enclosures", []) or []:
         if not isinstance(enc, dict):
             continue
-        if "image" in (enc.get("type") or ""):
-            return enc.get("href") or enc.get("url")
+        t = enc.get("type", "") or ""
+        if "image" in t:
+            return enc.get("href") or enc.get("url", "")
 
-    summary = entry.get("summary", "") or entry.get("description", "") or ""
-    img_match = re.search(r'<img[^>]+src=["\']([^"\']+)["\']', summary)
-    if img_match:
-        url = img_match.group(1)
-        if url.startswith("http"):
-            return url
-        if url.startswith("//"):
-            return "https:" + url
+    # Method 4: parse from HTML content
+    content = ""
+    for c in entry.get("content", []) or []:
+        if isinstance(c, dict):
+            content += c.get("value", "") or ""
+    summary = (entry.get("summary", "") or "") + (entry.get("description", "") or "") + content
+
+    for pattern in [
+        r'<img[^>]+src=["\']([^"\']+)["\']',
+        r"<img[^>]+src=([^ >]+)",
+    ]:
+        match = re.search(pattern, summary)
+        if match:
+            url = match.group(1).strip("\"'")
+            if url.startswith("http"):
+                return url
+            if url.startswith("//"):
+                return "https:" + url
+
+    # Method 5: ESPN photo CDN from article ID
+    link = entry.get("link", "") or ""
+    espn_id = re.search(r"/id/(\d{8,})", link)
+    if espn_id and "espn" in link.lower():
+        return f"https://a.espncdn.com/photo/2025/0101/r{espn_id.group(1)}_576x324.jpg"
 
     return None
 
@@ -339,6 +366,13 @@ def save_to_supabase(items: list[dict]):
 
 def main():
     print("=== NFL Stat Guru News Fetcher ===")
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=48)).isoformat()
+    try:
+        supabase.table("news_feed").delete().is_("image_url", "null").lt("fetched_at", cutoff).execute()
+        print(f"Deleted stale rows with no image_url (fetched_at < {cutoff})")
+    except Exception as e:
+        print(f"Cleanup skipped: {e}")
+
     rss = fetch_rss_feeds()
     print(f"RSS total: {len(rss)} articles")
     reddit = fetch_reddit()

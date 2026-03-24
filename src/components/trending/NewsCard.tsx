@@ -19,6 +19,18 @@ const SOURCE_BADGE: Record<string, { bg: string; fg: string; short: string }> = 
   PFF: { bg: "#1a1a1a", fg: "#ffffff", short: "PFF" },
 };
 
+/** Brand-colored gradient fallback when `image_url` is missing or fails to load (article cards). */
+const SOURCE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+  ESPN: { bg: "#d00", text: "#fff", label: "ESPN" },
+  NFL: { bg: "#013369", text: "#fff", label: "NFL.com" },
+  PFT: { bg: "#e8891a", text: "#fff", label: "Pro Football Talk" },
+  NBC: { bg: "#e8891a", text: "#fff", label: "NBC Sports" },
+  BR: { bg: "#f26522", text: "#fff", label: "Bleacher Report" },
+  PFR: { bg: "#1a1a1a", text: "#fff", label: "PFR" },
+  PFF: { bg: "#1a1a1a", text: "#fff", label: "PFF" },
+  Reddit: { bg: "#ff4500", text: "#fff", label: "" },
+};
+
 function badgeFor(item: TrendingFeedItem) {
   const src = safeText(item.source, "?");
   return (
@@ -30,18 +42,24 @@ function badgeFor(item: TrendingFeedItem) {
   );
 }
 
-function articlePlaceholder(source: string): { bg: string; emoji: string } {
-  switch (source) {
-    case "ESPN":
-      return { bg: "#d00", emoji: "📰" };
-    case "NFL":
-      return { bg: "#013369", emoji: "🏈" };
-    case "PFT":
-    case "NBC":
-      return { bg: "#e8891a", emoji: "📡" };
-    default:
-      return { bg: "#374151", emoji: "📰" };
-  }
+function ArticleImageFallback({ source, className }: { source: string; className?: string }) {
+  const c = SOURCE_COLORS[source] ?? {
+    bg: "#374151",
+    text: "#fff",
+    label: "",
+  };
+  const display = c.label || SOURCE_BADGE[source]?.short || source;
+  return (
+    <div
+      className={cn("flex h-full w-full items-center justify-center px-3 text-center", className)}
+      style={{
+        background: `linear-gradient(145deg, color-mix(in srgb, ${c.bg} 92%, #fff) 0%, ${c.bg} 42%, rgba(0,0,0,0.42) 100%)`,
+        color: c.text,
+      }}
+    >
+      <span className="text-[11px] font-extrabold leading-tight tracking-tight sm:text-xs">{display}</span>
+    </div>
+  );
 }
 
 function TagChips({ tags }: { tags: string[] }) {
@@ -119,7 +137,6 @@ export type FeaturedNewsCardProps = { item: TrendingFeedItem; className?: string
 export function FeaturedNewsCard({ item, className }: FeaturedNewsCardProps) {
   const href = item.url && item.url !== "#" ? item.url : undefined;
   const badge = badgeFor(item);
-  const ph = articlePlaceholder(item.source);
   const j = lookupJournalist(item.author);
   const initials = j?.initials ?? initialsFromName(item.author);
   const avatarBg = j?.color ?? badge.bg;
@@ -140,14 +157,7 @@ export function FeaturedNewsCard({ item, className }: FeaturedNewsCardProps) {
             alt=""
             className="h-full min-h-[14rem] w-full md:min-h-[200px]"
             sizes="280px"
-            placeholder={
-              <div
-                className="flex h-full min-h-[14rem] w-full items-center justify-center text-5xl md:min-h-[200px]"
-                style={{ backgroundColor: ph.bg }}
-              >
-                {ph.emoji}
-              </div>
-            }
+            placeholder={<ArticleImageFallback source={item.source} className="min-h-[14rem] md:min-h-[200px]" />}
           />
         </div>
         <div className="flex min-w-0 flex-1 flex-col justify-center p-5">
@@ -212,7 +222,6 @@ export type ArticleNewsCardProps = { item: TrendingFeedItem };
 export function ArticleNewsCard({ item }: ArticleNewsCardProps) {
   const href = item.url && item.url !== "#" ? item.url : undefined;
   const badge = badgeFor(item);
-  const ph = articlePlaceholder(item.source);
   const j = lookupJournalist(item.author);
   const initials = j?.initials ?? initialsFromName(item.author);
   const avatarBg = item.journalistColor ?? j?.color ?? badge.bg;
@@ -231,14 +240,7 @@ export function ArticleNewsCard({ item }: ArticleNewsCardProps) {
           alt=""
           className="h-[140px] w-full"
           sizes="(max-width: 768px) 100vw, 50vw"
-          placeholder={
-            <div
-              className="flex h-[140px] w-full items-center justify-center text-4xl"
-              style={{ backgroundColor: ph.bg }}
-            >
-              {ph.emoji}
-            </div>
-          }
+          placeholder={<ArticleImageFallback source={item.source} className="h-[140px]" />}
         />
         <span
           className="absolute left-2 top-2 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
