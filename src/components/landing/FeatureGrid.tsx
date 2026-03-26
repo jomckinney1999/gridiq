@@ -1,7 +1,7 @@
 const features = [
   {
-    title: "AI Natural Language Search",
-    desc: "Ask exactly what you want. Get instant, precise answers.",
+    title: "Ask Any Question. Get Answers Instantly.",
+    desc: "Type anything — 'Who led the NFL in YPRR?' or 'How many routes did Waddle run in week 7?' — and get a precise answer from 26 years of real data.",
     accent: "green" as const,
   },
   {

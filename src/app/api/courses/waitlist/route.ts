@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  let body: { email?: unknown };
+  let body: { email?: unknown; source?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -35,7 +35,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
   }
 
-  const { error } = await supabase.from("course_waitlist").insert({ email });
+  const source = typeof body.source === "string" ? body.source.trim().slice(0, 120) : null;
+
+  const { error } = await supabase.from("course_waitlist").insert({ email, ...(source ? { source } : {}) });
 
   if (!error) {
     return NextResponse.json({

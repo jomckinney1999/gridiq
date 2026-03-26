@@ -14,6 +14,7 @@ import {
   type TierListPlayer,
   type TiersState,
 } from "@/types/tierlist";
+import { awardXP, getSessionId } from "@/lib/xp/actions";
 import { cn } from "@/lib/utils";
 
 type PoolState = { tiers: TiersState; poolIds: string[] };
@@ -191,6 +192,7 @@ export default function TierListMakerPage() {
       }
       if (data.share_id) setShareId(data.share_id);
       setBanner("Saved. Share link ready.");
+      void awardXP(getSessionId(), "TIER_LIST_MADE", localStorage.getItem("guru_display_name") ?? undefined);
     } catch {
       setBanner("Network error while saving.");
     } finally {

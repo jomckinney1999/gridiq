@@ -1,20 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { FeaturedPlayerForHome } from "@/lib/server/featured-players";
 
 type Accent = "green" | "orange" | "blue" | "purple";
 
-type FeaturedPlayer = {
-  id: string;
-  name: string;
-  pos: string;
-  team: string;
-  grade: string;
-  accent: Accent;
-  image: string;
-  teamBg: string;
-};
-
-const featuredPlayers: FeaturedPlayer[] = [
+const DEFAULT_PLAYERS: FeaturedPlayerForHome[] = [
   {
     id: "jayden-daniels",
     name: "Jayden Daniels",
@@ -24,6 +14,8 @@ const featuredPlayers: FeaturedPlayer[] = [
     accent: "green",
     image: "/players/jayden-daniels.png",
     teamBg: "#5a1414",
+    snippet: "",
+    trending: false,
   },
   {
     id: "ceedee-lamb",
@@ -34,6 +26,8 @@ const featuredPlayers: FeaturedPlayer[] = [
     accent: "blue",
     image: "/players/ceedee-lamb.png",
     teamBg: "#003594",
+    snippet: "",
+    trending: false,
   },
   {
     id: "rueben-bain",
@@ -44,6 +38,8 @@ const featuredPlayers: FeaturedPlayer[] = [
     accent: "purple",
     image: "/players/reuben-bain.png",
     teamBg: "#f47321",
+    snippet: "",
+    trending: false,
   },
   {
     id: "fernando-mendoza",
@@ -54,6 +50,8 @@ const featuredPlayers: FeaturedPlayer[] = [
     accent: "orange",
     image: "/players/fernando-mendoza.png",
     teamBg: "#990000",
+    snippet: "",
+    trending: false,
   },
 ];
 
@@ -70,7 +68,9 @@ function accentVar(accent: Accent) {
   }
 }
 
-export function FeaturedPlayers() {
+export function FeaturedPlayers({ players }: { players?: FeaturedPlayerForHome[] }) {
+  const list = players?.length ? players : DEFAULT_PLAYERS;
+
   return (
     <section className="bg-[var(--bg-base)] py-16 sm:py-20">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -84,36 +84,39 @@ export function FeaturedPlayers() {
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {featuredPlayers.map((p) => {
+          {list.map((p) => {
             const c = accentVar(p.accent);
             return (
               <Link
                 key={p.id}
                 href={`/player/${p.id}`}
-                className="group relative block h-[260px] overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--bg-card)] transition duration-200 ease-out"
+                className="group relative block h-[280px] overflow-hidden rounded-[14px] border border-[var(--border)] bg-[var(--bg-card)] transition duration-200 ease-out"
               >
-                {/* Hover: accent border */}
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 z-30 rounded-[14px] opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                   style={{ boxShadow: `inset 0 0 0 1px ${c}` }}
                 />
 
-                {/* Top accent line */}
                 <div
+                  aria-hidden
                   className="absolute inset-x-0 top-0 z-10 h-[2px]"
                   style={{ background: `linear-gradient(90deg, ${c}, transparent)` }}
                 />
 
-                {/* Team color dot */}
                 <div
                   className="absolute left-3 top-3 z-20 h-2.5 w-2.5 rounded-full ring-2 ring-[color-mix(in_srgb,var(--txt)_45%,transparent)]"
                   style={{ backgroundColor: p.teamBg }}
                 />
 
-                {/* Grade badge */}
+                {p.trending ? (
+                  <div className="absolute right-3 top-3 z-20 rounded-full border border-[color-mix(in_srgb,var(--orange)_35%,transparent)] bg-[var(--orange-light)] px-2 py-0.5 text-[9px] font-bold text-[var(--orange)]">
+                    Trending 🔥
+                  </div>
+                ) : null}
+
                 <div
-                  className={`absolute right-3 top-3 z-20 rounded-full border px-2.5 py-1 text-[11px] font-bold ${
+                  className={`absolute right-3 ${p.trending ? "top-10" : "top-3"} z-20 rounded-full border px-2.5 py-1 text-[11px] font-bold ${
                     p.accent === "green"
                       ? "border-[var(--green-border)] bg-[var(--green-light)] text-[var(--green)]"
                       : p.accent === "orange"
@@ -126,11 +129,7 @@ export function FeaturedPlayers() {
                   {p.grade}
                 </div>
 
-                {/* Top 55% — pixel art */}
-                <div
-                  className="relative h-[55%] w-full overflow-hidden"
-                  style={{ backgroundColor: p.teamBg }}
-                >
+                <div className="relative h-[55%] w-full overflow-hidden" style={{ backgroundColor: p.teamBg }}>
                   <Image
                     src={p.image}
                     alt={p.name}
@@ -142,7 +141,6 @@ export function FeaturedPlayers() {
                   />
                 </div>
 
-                {/* Bottom 45% — gradient + text */}
                 <div className="relative h-[45%]">
                   <div
                     aria-hidden
@@ -153,6 +151,9 @@ export function FeaturedPlayers() {
                     <div className="mt-1 text-[12px] text-[var(--txt-2)]">
                       {p.pos} · {p.team}
                     </div>
+                    {p.snippet ? (
+                      <p className="mt-2 line-clamp-2 text-[11px] leading-snug text-[var(--txt-muted)]">{p.snippet}</p>
+                    ) : null}
                   </div>
                 </div>
               </Link>

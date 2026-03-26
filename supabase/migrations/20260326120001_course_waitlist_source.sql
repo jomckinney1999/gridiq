@@ -1,0 +1,1 @@
+ALTER TABLE course_waitlist ADD COLUMN IF NOT EXISTS source TEXT;

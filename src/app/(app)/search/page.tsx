@@ -8,6 +8,7 @@ import { DataTable } from "@/components/search/DataTable";
 import { FollowUpSuggestions } from "@/components/search/FollowUpSuggestions";
 import { SearchBar } from "@/components/search/SearchBar";
 import { StatCardGrid } from "@/components/search/StatCardGrid";
+import { awardXP, getSessionId } from "@/lib/xp/actions";
 import { normalizeQueryResponse } from "@/lib/normalizeQueryResponse";
 import type { ChatMessage, GridIQAPIResponse } from "@/types/gridiq-query";
 
@@ -124,6 +125,8 @@ function SearchPageInner() {
         const parsed = normalizeQueryResponse(data);
         const nextHist = (data.conversationHistory as ChatMessage[]) ?? hist;
         setConversationHistory(nextHist);
+
+        void awardXP(getSessionId(), "AI_SEARCH", localStorage.getItem("guru_display_name") ?? undefined);
 
         setTurns((prev) => [
           ...prev,

@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type KeyboardEvent,
 } from "react";
+import type { FeaturedPlayerForHome } from "@/lib/server/featured-players";
 import { AIResponseCard } from "@/components/search/AIResponseCard";
 import { DataTable } from "@/components/search/DataTable";
 import { FollowUpSuggestions } from "@/components/search/FollowUpSuggestions";
@@ -212,6 +214,7 @@ function PlayerCard({
   bars,
   imageSrc,
   teamBg,
+  trending,
 }: {
   accent: Accent;
   name: string;
@@ -220,6 +223,7 @@ function PlayerCard({
   bars: Array<{ label: string; value: number }>;
   imageSrc: string;
   teamBg: string;
+  trending?: boolean;
 }) {
   const color =
     accent === "green"
@@ -233,6 +237,11 @@ function PlayerCard({
   return (
     <div className="relative flex min-w-[240px] flex-1 flex-col gap-3 p-4 sm:min-w-0">
       <AccentLine accent={accent} />
+      {trending ? (
+        <div className="absolute right-3 top-2 z-10 rounded-full border border-[color-mix(in_srgb,var(--orange)_35%,transparent)] bg-[var(--orange-light)] px-2 py-0.5 text-[9px] font-bold text-[var(--orange)]">
+          Trending 🔥
+        </div>
+      ) : null}
       <div className="flex items-center gap-3">
         <PlayerImage src={imageSrc} alt={name} teamBg={teamBg} />
         <div className="min-w-0">
@@ -271,7 +280,25 @@ function PlayerCard({
   );
 }
 
-export function Hero() {
+export function Hero({ trendingPlayers }: { trendingPlayers?: FeaturedPlayerForHome[] }) {
+  const trendingDeck = useMemo(() => {
+    if (!trendingPlayers?.length) return null;
+    return trendingPlayers.map((p) => ({
+      name: p.name,
+      position: p.pos,
+      team: p.team,
+      grade: p.grade === "—" ? "92.0" : p.grade,
+      accent: p.accent,
+      image: p.image,
+      teamBg: p.teamBg,
+      bars: p.bars ?? [
+        { label: "Buzz", value: 88 },
+        { label: "Trend", value: 85 },
+        { label: "News", value: 82 },
+      ],
+    }));
+  }, [trendingPlayers]);
+
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState<GridIQAPIResponse | null>(null);
@@ -627,7 +654,7 @@ export function Hero() {
 
                   <div className="mt-4 overflow-x-auto">
                     <div className="grid min-w-[980px] grid-cols-4 divide-x divide-[var(--border)] rounded-[14px] border border-[var(--border)] bg-[var(--bg-card2)]">
-                      {BROWSER_MOCKUP_PLAYERS.map((p) => (
+                      {(trendingDeck ?? [...BROWSER_MOCKUP_PLAYERS]).map((p) => (
                         <PlayerCard
                           key={p.name}
                           accent={p.accent}
@@ -637,6 +664,7 @@ export function Hero() {
                           imageSrc={p.image}
                           teamBg={p.teamBg}
                           bars={[...p.bars]}
+                          trending={!!trendingDeck}
                         />
                       ))}
                     </div>

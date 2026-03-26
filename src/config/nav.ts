@@ -17,11 +17,7 @@ export const PRIMARY_NAV_SIDEBAR_ICONS = ["⌂", "📈", "📊", "📚", "🎮",
 export function isActiveNav(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
   if (href === "/games") {
-    return (
-      pathname === "/games" ||
-      pathname.startsWith("/trivia") ||
-      pathname.startsWith("/tierlist")
-    );
+    return pathname === "/games" || pathname.startsWith("/games/");
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
